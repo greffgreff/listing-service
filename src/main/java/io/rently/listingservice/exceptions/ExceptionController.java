@@ -1,6 +1,7 @@
 package io.rently.listingservice.exceptions;
 
 import io.rently.listingservice.dtos.ResponseContent;
+import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,17 +13,19 @@ import javax.servlet.http.HttpServletResponse;
 @ControllerAdvice
 public class ExceptionController {
 
-    @ExceptionHandler(Exception.class)
-    @ResponseBody
-    public ResponseContent handleGenericException(HttpServletResponse response, Exception exception) {
-        ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR.getException();
-        response.setStatus(resEx.getStatus().value());
-        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();
-    }
+//    @ExceptionHandler(Exception.class)
+//    @ResponseBody
+//    public ResponseContent handleGenericException(HttpServletResponse response, Exception exception) {
+//        Broadcaster.error(exception.getMessage());
+//        ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR.getException();
+//        response.setStatus(resEx.getStatus().value());
+//        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();
+//    }
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseBody
     public static ResponseContent handleResponseException(HttpServletResponse response, ResponseStatusException ex) {
+        Broadcaster.error("[" + ex.getStatus() + "] " + ex.getReason());
         response.setStatus(ex.getStatus().value());
         return new ResponseContent.Builder(ex.getStatus()).setMessage(ex.getReason()).build();
     }

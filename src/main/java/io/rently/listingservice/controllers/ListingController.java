@@ -1,6 +1,8 @@
 package io.rently.listingservice.controllers;
 
+import io.rently.listingservice.dtos.Lease;
 import io.rently.listingservice.dtos.ResponseContent;
+import io.rently.listingservice.exceptions.HttpValidationFailure;
 import io.rently.listingservice.services.ListingService;
 import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,18 +21,18 @@ public class ListingController {
         return new RedirectView(PREFIX + "/");
     }
 
-    @GetMapping(PREFIX + "/")
-    public ResponseContent handleGetRequest() {
-        return new ResponseContent.Builder().setMessage("hello world").build();
-    }
-
     @PostMapping("/**")
     public RedirectView redirectPosts() {
         return new RedirectView(PREFIX + "/");
     }
 
+    @GetMapping(PREFIX + "/")
+    public ResponseContent handleGetRequest() {
+        return new ResponseContent.Builder().setMessage("hello world").build();
+    }
+
     @PostMapping(PREFIX + "/")
-    public ResponseContent handlePostRequest(@RequestBody String body) {
+    public ResponseContent handlePostRequest(@RequestBody Lease body) {
         Broadcaster.info(body);
         return new ResponseContent.Builder().setMessage("hello world").build();
     }

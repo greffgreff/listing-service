@@ -4,33 +4,33 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Broadcaster;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.net.http.HttpHeaders;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
 public class Interceptor implements HandlerInterceptor {
     private static final String secretKey = "HelloDarknessMyOldFriend"; // move to .env file
-    public final List<String> blackListMethods;
+    public final List<String> blackListedMethods;
 
     public Interceptor(RequestMethod... excludedMethods) {
-        this.blackListMethods = Arrays.stream(excludedMethods).toList().stream()
+        this.blackListedMethods = Arrays.stream(excludedMethods).toList().stream()
                 .map(object -> Objects.toString(object, null))
                 .collect(Collectors.toList());
+
+        if (blackListedMethods.size() != 0) {
+            Broadcaster.info("Loaded middleware with " + String.join(", ", blackListedMethods) + " method(s) disabled");
+        }
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if (blackListMethods.contains(request.getMethod())) return true;
+        if (blackListedMethods.contains(request.getMethod())) return true;
         String bearer = request.getHeader("Authorization");
         if (bearer == null) throw Errors.INVALID_REQUEST.getException();
         if (!validateBearerToken(bearer)) throw Errors.UNAUTHORIZED_REQUEST.getException();
