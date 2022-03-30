@@ -15,7 +15,7 @@ public class ListingController {
     public ListingService service;
 
     @GetMapping("/**")
-    public RedirectView redirect() {
+    public RedirectView redirectGets() {
         return new RedirectView(PREFIX + "/");
     }
 
@@ -24,9 +24,14 @@ public class ListingController {
         return new ResponseContent.Builder().setMessage("hello world").build();
     }
 
+    @PostMapping("/**")
+    public RedirectView redirectPosts() {
+        return new RedirectView(PREFIX + "/");
+    }
+
     @PostMapping(PREFIX + "/")
     public ResponseContent handlePostRequest(@RequestBody String body) {
-        Broadcaster.debug(body);
+        Broadcaster.info(body);
         return new ResponseContent.Builder().setMessage("hello world").build();
     }
 }
