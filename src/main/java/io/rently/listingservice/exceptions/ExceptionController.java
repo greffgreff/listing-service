@@ -17,19 +17,13 @@ public class ExceptionController {
     public ResponseContent handleGenericException(HttpServletResponse response, Exception exception) {
         ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR.getException();
         response.setStatus(resEx.getStatus().value());
-        return new ResponseContent
-                .Builder(resEx.getStatus())
-                .setMessage(resEx.getMessage())
-                .build();
+        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();
     }
 
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseBody
     public static ResponseContent handleResponseException(HttpServletResponse response, ResponseStatusException ex) {
         response.setStatus(ex.getStatus().value());
-        return new ResponseContent
-                .Builder(ex.getStatus())
-                .setMessage(ex.getReason())
-                .build();
+        return new ResponseContent.Builder(ex.getStatus()).setMessage(ex.getReason()).build();
     }
 }

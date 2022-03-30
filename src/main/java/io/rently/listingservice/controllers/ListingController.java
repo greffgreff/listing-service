@@ -2,10 +2,9 @@ package io.rently.listingservice.controllers;
 
 import io.rently.listingservice.dtos.ResponseContent;
 import io.rently.listingservice.services.ListingService;
+import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @RestController
@@ -26,7 +25,8 @@ public class ListingController {
     }
 
     @PostMapping(PREFIX + "/")
-    public ResponseContent handlePostRequest() {
+    public ResponseContent handlePostRequest(@RequestBody String body) {
+        Broadcaster.debug(body);
         return new ResponseContent.Builder().setMessage("hello world").build();
     }
 }
