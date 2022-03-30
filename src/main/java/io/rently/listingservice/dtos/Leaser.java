@@ -5,21 +5,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.rently.listingservice.exceptions.HttpValidationFailure;
-import io.rently.listingservice.utils.Utils;
 import io.rently.listingservice.utils.Validation;
 
-import java.sql.Timestamp;
 import java.util.UUID;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonDeserialize(builder = Contact.Builder.class)
-public class Contact {
+@JsonDeserialize(builder = Leaser.Builder.class)
+public class Leaser {
     public final String id;
     public final String name;
     public final String email;
     public final String phone;
 
-    public Contact(Builder builder) {
+    public Leaser(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.email = builder.email;
@@ -48,9 +45,9 @@ public class Contact {
         }
 
         @JsonCreator
-        public Contact build() {
+        public Leaser build() {
             validateFields();
-            return new Contact(this);
+            return new Leaser(this);
         }
 
         private void validateFields() {

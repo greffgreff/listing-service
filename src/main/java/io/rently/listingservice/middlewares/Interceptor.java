@@ -4,6 +4,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Broadcaster;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -30,6 +31,10 @@ public class Interceptor implements HandlerInterceptor {
     }
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (RequestMethod.OPTIONS.name().equals(request.getMethod())) {
+            response.setHeader("Access-control-Allow-Origin", "*");
+            return true;
+        }
         if (blackListedMethods.contains(request.getMethod())) return true;
         String bearer = request.getHeader("Authorization");
         if (bearer == null) throw Errors.INVALID_REQUEST.getException();

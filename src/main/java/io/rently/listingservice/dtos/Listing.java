@@ -1,7 +1,6 @@
 package io.rently.listingservice.dtos;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.rently.listingservice.exceptions.HttpValidationFailure;
@@ -10,9 +9,8 @@ import io.rently.listingservice.utils.Validation;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonDeserialize(builder = Lease.Builder.class)
-public class Lease {
+@JsonDeserialize(builder = Listing.Builder.class)
+public class Listing {
     public final String id;
     public final String name;
     public final String desc;
@@ -22,9 +20,9 @@ public class Lease {
     public final String endDate;
     public final String createdAt;
     public final String address;
-    public final Contact contact;
+    public final Leaser leaser;
 
-    public Lease(Builder builder) {
+    public Listing(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
         this.desc = builder.desc;
@@ -34,7 +32,7 @@ public class Lease {
         this.endDate = builder.endDate;
         this.createdAt = builder.createdAt;
         this.address = builder.address;
-        this.contact = builder.contact;
+        this.leaser = builder.leaser;
     }
 
     public static class Builder {
@@ -57,16 +55,16 @@ public class Lease {
         @JsonProperty
         private String desc;
         @JsonProperty
-        private final Contact contact;
+        private final Leaser leaser;
 
-        public Builder(String id, String name, String price, String startDate, String endDate, String createdAt, Contact contact) {
+        public Builder(String id, String name, String price, String startDate, String endDate, String createdAt, Leaser leaser) {
             this.id = id;
             this.name = name;
             this.price = price;
             this.startDate = startDate;
             this.endDate = endDate;
             this.createdAt = createdAt;
-            this.contact = contact;
+            this.leaser = leaser;
         }
 
         public Builder setAddress(String address) {
@@ -85,9 +83,9 @@ public class Lease {
         }
 
         @JsonCreator
-        public Lease build() {
+        public Listing build() {
             validateFields();
-            return new Lease(this);
+            return new Listing(this);
         }
 
         private void validateFields() {
