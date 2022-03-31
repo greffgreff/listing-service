@@ -32,13 +32,21 @@ public class Interceptor implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (RequestMethod.OPTIONS.name().equals(request.getMethod())) {
-            response.setHeader("Access-control-Allow-Origin", "*");
-            return true;
+            return handleOptionRequest(response);
         }
         if (blackListedMethods.contains(request.getMethod())) return true;
         String bearer = request.getHeader("Authorization");
         if (bearer == null) throw Errors.INVALID_REQUEST.getException();
         if (!validateBearerToken(bearer)) throw Errors.UNAUTHORIZED_REQUEST.getException();
+        return true;
+    }
+
+    public boolean handleOptionRequest(HttpServletResponse response) {
+        response.setHeader("Cache-Control","no-cache");
+        response.setHeader("Access-control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setStatus(HttpStatus.OK.value());
         return true;
     }
 

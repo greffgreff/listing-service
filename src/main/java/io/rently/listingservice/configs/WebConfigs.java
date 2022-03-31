@@ -8,7 +8,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WebConfiguration implements WebMvcConfigurer {
+public class WebConfigs implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

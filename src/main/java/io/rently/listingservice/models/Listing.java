@@ -1,16 +1,20 @@
-package io.rently.listingservice.dtos;
+package io.rently.listingservice.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.rently.listingservice.exceptions.HttpValidationFailure;
 import io.rently.listingservice.utils.Validation;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
+@Document("listings")
 @JsonDeserialize(builder = Listing.Builder.class)
 public class Listing {
+    @Id
     public final String id;
     public final String name;
     public final String desc;
@@ -19,7 +23,7 @@ public class Listing {
     public final String startDate;
     public final String endDate;
     public final String createdAt;
-    public final String address;
+    public final Address address;
     public final Leaser leaser;
 
     public Listing(Builder builder) {
@@ -49,13 +53,13 @@ public class Listing {
         @JsonProperty
         private final String createdAt;
         @JsonProperty
-        private String address;
-        @JsonProperty
         private String image;
         @JsonProperty
         private String desc;
         @JsonProperty
         private final Leaser leaser;
+        @JsonProperty
+        private Address address;
 
         public Builder(String id, String name, String price, String startDate, String endDate, String createdAt, Leaser leaser) {
             this.id = id;
@@ -67,7 +71,7 @@ public class Listing {
             this.leaser = leaser;
         }
 
-        public Builder setAddress(String address) {
+        public Builder setAddress(Address address) {
             this.address = address;
             return this;
         }

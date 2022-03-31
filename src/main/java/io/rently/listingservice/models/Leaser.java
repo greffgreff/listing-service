@@ -1,7 +1,6 @@
-package io.rently.listingservice.dtos;
+package io.rently.listingservice.models;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.rently.listingservice.exceptions.HttpValidationFailure;

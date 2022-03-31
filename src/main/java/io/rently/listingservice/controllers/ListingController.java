@@ -1,14 +1,12 @@
 package io.rently.listingservice.controllers;
 
-import io.rently.listingservice.dtos.Listing;
-import io.rently.listingservice.dtos.ResponseContent;
+import io.rently.listingservice.models.Listing;
+import io.rently.listingservice.models.ResponseContent;
 import io.rently.listingservice.services.ListingService;
-import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
-@CrossOrigin("http://localhost:3000/")
 @RestController
 public class ListingController {
     public static final String PREFIX = "/api/v1";
@@ -33,7 +31,7 @@ public class ListingController {
 
     @PostMapping(PREFIX + "/")
     public ResponseContent handlePostRequest(@RequestBody Listing listing) {
-        Broadcaster.info(listing.leaser.name);
-        return new ResponseContent.Builder().setMessage("hello world").build();
+        service.addListing(listing);
+        return new ResponseContent.Builder().setData(listing).build();
     }
 }

@@ -1,4 +1,4 @@
-package io.rently.listingservice.dtos;
+package io.rently.listingservice.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;

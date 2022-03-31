@@ -1,8 +1,7 @@
 package io.rently.listingservice.exceptions;
 
-import io.rently.listingservice.dtos.ResponseContent;
+import io.rently.listingservice.models.ResponseContent;
 import io.rently.listingservice.utils.Broadcaster;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +24,7 @@ public class ExceptionController {
     @ExceptionHandler(ResponseStatusException.class)
     @ResponseBody
     public static ResponseContent handleResponseException(HttpServletResponse response, ResponseStatusException ex) {
-        Broadcaster.error("[" + ex.getStatus() + "] " + ex.getReason());
+        Broadcaster.httpError(ex);
         response.setStatus(ex.getStatus().value());
         return new ResponseContent.Builder(ex.getStatus()).setMessage(ex.getReason()).build();
     }
