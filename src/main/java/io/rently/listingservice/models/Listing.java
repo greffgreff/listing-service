@@ -23,6 +23,7 @@ public class Listing {
     public final String startDate;
     public final String endDate;
     public final String createdAt;
+    public final String updatedAt;
     public final Address address;
     public final Leaser leaser;
 
@@ -35,6 +36,7 @@ public class Listing {
         this.startDate = builder.startDate;
         this.endDate = builder.endDate;
         this.createdAt = builder.createdAt;
+        this.updatedAt = builder.updatedAt;
         this.address = builder.address;
         this.leaser = builder.leaser;
     }
@@ -52,6 +54,8 @@ public class Listing {
         private final String endDate;
         @JsonProperty
         private final String createdAt;
+        @JsonProperty
+        public String updatedAt;
         @JsonProperty
         private String image;
         @JsonProperty
