@@ -3,13 +3,8 @@ package io.rently.listingservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.rently.listingservice.exceptions.Errors;
-import io.rently.listingservice.utils.Validation;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.sql.Timestamp;
-import java.util.UUID;
 
 @Document("listings")
 @JsonDeserialize(builder = Listing.Builder.class)
@@ -119,28 +114,7 @@ public class Listing {
 
         @JsonCreator
         public Listing build() {
-            validateFields();
             return new Listing(this);
-        }
-
-        private void validateFields() {
-            if (id == null) {
-                throw new IllegalArgumentException();
-            } else if (Validation.tryParseUUID(id) == null) {
-                throw new Errors.HttpValidationFailure("id", UUID.class, id);
-            }
-            if (!Validation.canParseNumeric(price)) {
-                throw new Errors.HttpValidationFailure("price", Integer.class, price);
-            }
-            if (!Validation.canParseToTs(startDate)) {
-                throw new Errors.HttpValidationFailure("startDate", Timestamp.class, startDate);
-            }
-            if (!Validation.canParseToTs(endDate)) {
-                throw new Errors.HttpValidationFailure("endDate", Timestamp.class, endDate);
-            }
-            if (!Validation.canParseToTs(createdAt)) {
-                throw new Errors.HttpValidationFailure("createdAt", Timestamp.class, createdAt);
-            }
         }
     }
 }
