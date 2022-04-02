@@ -3,7 +3,7 @@ package io.rently.listingservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.rently.listingservice.exceptions.HttpValidationFailure;
+import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -25,7 +25,8 @@ public class Listing {
     public final String createdAt;
     public final String updatedAt;
     public final Address address;
-    public final Leaser leaser;
+    public final String leaser;
+    public final String phone;
 
     public Listing(Builder builder) {
         this.id = builder.id;
@@ -39,6 +40,25 @@ public class Listing {
         this.updatedAt = builder.updatedAt;
         this.address = builder.address;
         this.leaser = builder.leaser;
+        this.phone = builder.phone;
+    }
+
+    @Override
+    public String toString() {
+        return "Listing{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", price='" + price + '\'' +
+                ", image='" + image + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", createdAt='" + createdAt + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", address=" + address +
+                ", leaser='" + leaser + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 
     public static class Builder {
@@ -61,11 +81,13 @@ public class Listing {
         @JsonProperty
         private String desc;
         @JsonProperty
-        private final Leaser leaser;
+        private final String leaser;
+        @JsonProperty
+        private String phone;
         @JsonProperty
         private Address address;
 
-        public Builder(String id, String name, String price, String startDate, String endDate, String createdAt, Leaser leaser) {
+        public Builder(String id, String name, String price, String startDate, String endDate, String createdAt, String leaser) {
             this.id = id;
             this.name = name;
             this.price = price;
@@ -90,6 +112,11 @@ public class Listing {
             return this;
         }
 
+        public Builder setPhone(String phone) {
+            this.phone = phone;
+            return this;
+        }
+
         @JsonCreator
         public Listing build() {
             validateFields();
@@ -97,20 +124,22 @@ public class Listing {
         }
 
         private void validateFields() {
-            if (Validation.tryParseUUID(id) == null) {
-                throw new HttpValidationFailure("id", UUID.class, id);
+            if (id == null) {
+                throw new IllegalArgumentException();
+            } else if (Validation.tryParseUUID(id) == null) {
+                throw new Errors.HttpValidationFailure("id", UUID.class, id);
             }
             if (!Validation.canParseNumeric(price)) {
-                throw new HttpValidationFailure("price", Integer.class, price);
+                throw new Errors.HttpValidationFailure("price", Integer.class, price);
             }
             if (!Validation.canParseToTs(startDate)) {
-                throw new HttpValidationFailure("startDate", Timestamp.class, startDate);
+                throw new Errors.HttpValidationFailure("startDate", Timestamp.class, startDate);
             }
             if (!Validation.canParseToTs(endDate)) {
-                throw new HttpValidationFailure("endDate", Timestamp.class, endDate);
+                throw new Errors.HttpValidationFailure("endDate", Timestamp.class, endDate);
             }
             if (!Validation.canParseToTs(createdAt)) {
-                throw new HttpValidationFailure("createdAt", Timestamp.class, createdAt);
+                throw new Errors.HttpValidationFailure("createdAt", Timestamp.class, createdAt);
             }
         }
     }

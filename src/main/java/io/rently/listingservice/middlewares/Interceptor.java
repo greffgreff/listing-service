@@ -38,8 +38,8 @@ public class Interceptor implements HandlerInterceptor {
         }
         if (blackListedMethods.contains(request.getMethod())) return true;
         String bearer = request.getHeader("Authorization");
-        if (bearer == null) throw Errors.INVALID_REQUEST.getException();
-        if (!validateBearerToken(bearer)) throw Errors.UNAUTHORIZED_REQUEST.getException();
+        if (bearer == null) throw Errors.INVALID_REQUEST;
+        if (!validateBearerToken(bearer)) throw Errors.UNAUTHORIZED_REQUEST;
         return true;
     }
 

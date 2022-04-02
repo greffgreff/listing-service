@@ -3,7 +3,7 @@ package io.rently.listingservice.models;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.rently.listingservice.exceptions.HttpValidationFailure;
+import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Validation;
 
 import java.util.UUID;
@@ -22,6 +22,17 @@ public class Address {
         this.city = builder.city;
         this.zip = builder.zip;
         this.country = builder.country;
+    }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id='" + id + '\'' +
+                ", street='" + street + '\'' +
+                ", city='" + city + '\'' +
+                ", zip='" + zip + '\'' +
+                ", country='" + country + '\'' +
+                '}';
     }
 
     public static class Builder {
@@ -56,7 +67,7 @@ public class Address {
 
         private void validateFields() {
             if (Validation.tryParseUUID(id) == null) {
-                throw new HttpValidationFailure("id", UUID.class, id);
+                throw new Errors.HttpValidationFailure("id", UUID.class, id);
             }
         }
     }
