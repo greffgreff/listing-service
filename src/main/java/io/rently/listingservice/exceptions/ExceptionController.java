@@ -15,7 +15,7 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseContent handleGenericException(HttpServletResponse response, Exception exception) {
-        Broadcaster.error(exception.getMessage());
+        Broadcaster.error(exception);
         ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR;
         response.setStatus(resEx.getStatus().value());
         return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();

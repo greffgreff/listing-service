@@ -10,18 +10,20 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @JsonDeserialize(builder = Listing.Builder.class)
 public class Listing {
     @Id
-    public final String id;
-    public final String name;
-    public final String desc;
-    public final String price;
-    public final String image;
-    public final String startDate;
-    public final String endDate;
-    public final String createdAt;
-    public final String updatedAt;
-    public final Address address;
-    public final String leaser;
-    public final String phone;
+    private String id;
+    private String name;
+    private String desc;
+    private String price;
+    private String image;
+    private String startDate;
+    private String endDate;
+    private String createdAt;
+    private String updatedAt;
+    private Address address;
+    private String leaser;
+    private String phone;
+
+    protected Listing() { }
 
     public Listing(Builder builder) {
         this.id = builder.id;
@@ -54,6 +56,54 @@ public class Listing {
                 ", leaser='" + leaser + '\'' +
                 ", phone='" + phone + '\'' +
                 '}';
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public String getLeaser() {
+        return leaser;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 
     public static class Builder {

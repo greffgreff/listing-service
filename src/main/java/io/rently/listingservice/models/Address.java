@@ -6,16 +6,34 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonDeserialize(builder = Address.Builder.class)
 public class Address {
-    public String street;
-    public String city;
-    public String zip;
-    public String country;
+    private String street;
+    private String city;
+    private String zip;
+    private String country;
+
+    protected Address() { }
 
     public Address(Builder builder) {
         this.street = builder.street;
         this.city = builder.city;
         this.zip = builder.zip;
         this.country = builder.country;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public String getCountry() {
+        return country;
     }
 
     @Override
