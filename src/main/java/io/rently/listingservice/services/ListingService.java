@@ -4,12 +4,14 @@ import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.interfaces.ListingsRepository;
 import io.rently.listingservice.utils.Broadcaster;
+import io.rently.listingservice.utils.Jwt;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,15 +22,30 @@ public class ListingService {
     @Autowired
     private ListingsRepository repository;
 
+    public Listing getListingById(String id) {
+        Broadcaster.info("Fetching listing from database: " + id);
+        return tryFindById(id);
+    }
+
     public void addListing(Listing listing) {
         Broadcaster.info("Adding listing to database: " + listing.getId());
         validateData(listing);
         repository.insert(listing);
     }
 
-    public Listing getListingById(String id) {
-        Broadcaster.info("Fetching listing from database by id: " + id);
-        return tryFindById(id);
+    public void deleteById(String id) {
+        Broadcaster.info("Removing listing from database: " + id);
+        repository.deleteById(id);
+    }
+
+    public void putById(String id, Listing listing) {
+        Broadcaster.info("Updating listing from database: " + id);
+        if (!Objects.equals(id, listing.getId())) {
+            throw Errors.INVALID_REQUEST;
+        }
+        validateData(listing);
+        repository.deleteById(id);
+        repository.insert(listing);
     }
 
     public Listing tryFindById(String id) {
@@ -40,8 +57,27 @@ public class ListingService {
         }
     }
 
+    public void verifyOwnership(String header, String listingId) {
+        Listing listing = tryFindById(listingId);
+        String id = Jwt.getClaims(header).getSubject();
+
+        if (!Objects.equals(id, listing.getLeaser())) {
+            throw Errors.UNAUTHORIZED_REQUEST;
+        }
+    }
+
+    public void verifyOwnership(String header, Listing listing) {
+        String id = Jwt.getClaims(header).getSubject();
+
+        if (!Objects.equals(id, listing.getLeaser())) {
+            throw Errors.UNAUTHORIZED_REQUEST;
+        }
+    }
+
     private static void validateData(Listing listing) {
-        if (listing.getId() == null) {
+        if (listing == null) {
+            throw Errors.NO_DATA;
+        } else if (listing.getId() == null) {
             throw new Errors.HttpFieldMissing("id");
         } else if (Validation.tryParseUUID(listing.getId()) == null) {
             throw new Errors.HttpValidationFailure("id", UUID.class, listing.getId());

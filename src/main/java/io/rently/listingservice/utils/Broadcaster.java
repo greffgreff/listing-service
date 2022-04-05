@@ -19,6 +19,7 @@ public class Broadcaster {
 
     public static void error(Exception ex) {
         System.out.println(defaultFormat("[ERROR]") + ex.getMessage());
+        ex.printStackTrace();
     }
 
     public static void httpError(ResponseStatusException ex) {

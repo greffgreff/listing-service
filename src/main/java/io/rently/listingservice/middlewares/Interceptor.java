@@ -4,6 +4,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Broadcaster;
+import io.rently.listingservice.utils.Jwt;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,36 +35,30 @@ public class Interceptor implements HandlerInterceptor {
 
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (RequestMethod.OPTIONS.name().equals(request.getMethod())) {
-            return handleOptionRequest(response);
+            handleOptionRequest(response);
+            return true;
         }
-        if (blackListedMethods.contains(request.getMethod())) return true;
+        if (blackListedMethods.contains(request.getMethod())) {
+            return true;
+        }
+
         String bearer = request.getHeader("Authorization");
-        if (bearer == null) throw Errors.INVALID_REQUEST;
-        if (!validateBearerToken(bearer)) throw Errors.UNAUTHORIZED_REQUEST;
+        if (bearer == null) {
+            throw Errors.INVALID_REQUEST;
+        }
+
+        if (!Jwt.validateBearerToken(bearer)) {
+            throw Errors.UNAUTHORIZED_REQUEST;
+        }
+
         return true;
     }
 
-    public boolean handleOptionRequest(HttpServletResponse response) {
+    public void handleOptionRequest(HttpServletResponse response) {
         response.setHeader("Cache-Control","no-cache");
         response.setHeader("Access-control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
         response.setHeader("Access-Control-Allow-Headers", "*");
         response.setStatus(HttpStatus.OK.value());
-        return true;
     }
-
-    public static boolean validateBearerToken(String bearer) {
-        String token = bearer.split(" ")[1];
-        String[] chunks = token.split("\\.");
-        SignatureAlgorithm sa = SignatureAlgorithm.HS256;
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), sa.getJcaName());
-        DefaultJwtSignatureValidator validator = new DefaultJwtSignatureValidator(sa, secretKeySpec);
-        String tokenWithoutSignature = chunks[0] + "." + chunks[1];
-        String signature = chunks[2];
-        return validator.isValid(tokenWithoutSignature, signature);
-    }
-
-    // Base64.Decoder decoder = Base64.getUrlDecoder();
-    // String header = new String(decoder.decode(chunks[0]));
-    // String payload = new String(decoder.decode(chunks[1]));
 }
