@@ -23,7 +23,7 @@ public class Jwt {
         String[] chunks = bearer.split("\\.");
         String tokenWithoutSignature = chunks[0] + "." + chunks[1];
         String signature = chunks[2];
-        return VALIDATOR.isValid(tokenWithoutSignature, signature) && getClaims(token).getExpiration().after(new Date());
+        return VALIDATOR.isValid(tokenWithoutSignature, signature);
     }
 
     public static void checkExpiration(String token) {
