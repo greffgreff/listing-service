@@ -171,6 +171,7 @@ A [listing](#listing-object) object.
 |   `406`    | _"A non-optional field has missing value. Value of field '`field`' was expected but got null"_                        | Non-optional field was missing                                                    |
 |   `406`    | _"Validation failure occurred. Value of field '`field`' could not be recognized as type "`type`" (value: '`value`')"_ | Non-optional field was of the wrong type                                          |
 |   `401`    | _"Request is either no longer valid or has been tampered with"_                                                       | Request bearer has either expired or the subject and the data holder do not match |
+| `406` | *"No content found in request body"* | No data was sent through the request's body in json format | 
 
 <br />
 
