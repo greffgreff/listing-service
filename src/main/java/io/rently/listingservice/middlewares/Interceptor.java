@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class Interceptor implements HandlerInterceptor {
-    private static final String secretKey = "HelloDarknessMyOldFriend"; // move to .env file
-    public final List<String> blackListedMethods;
+    private final List<String> blackListedMethods;
 
     public Interceptor(RequestMethod... excludedMethods) {
         this.blackListedMethods = Arrays.stream(excludedMethods).toList().stream()

@@ -7,6 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 
 import javax.crypto.spec.SecretKeySpec;
+import java.util.Date;
 
 public class Jwt {
     private static final String SECRET = "HelloDarknessMyOldFriend"; // move to .env file
@@ -20,7 +21,7 @@ public class Jwt {
         String[] chunks = bearer.split("\\.");
         String tokenWithoutSignature = chunks[0] + "." + chunks[1];
         String signature = chunks[2];
-        return VALIDATOR.isValid(tokenWithoutSignature, signature);
+        return VALIDATOR.isValid(tokenWithoutSignature, signature) && getClaims(token).getExpiration().after(new Date());
     }
 
     public static Claims getClaims(String token) {
