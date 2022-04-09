@@ -11,15 +11,17 @@ import java.sql.Timestamp;
 
 @JsonDeserialize(builder = ResponseContent.Builder.class)
 public class ResponseContent {
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonProperty
     @NonNull
     private final Timestamp timestamp;
-
+    @JsonProperty
     @NonNull
     private final int status;
-
+    @JsonProperty
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final String message;
-
+    @JsonProperty(value = "content")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private final Object data;
 
@@ -45,14 +47,9 @@ public class ResponseContent {
     }
 
     public static class Builder {
-        @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-        @JsonProperty
         private final Timestamp timestamp;
-        @JsonProperty
         private final int status;
-        @JsonProperty
         private String message;
-        @JsonProperty(value = "content")
         private Object data;
 
         public Builder(Timestamp timestamp, int status) {

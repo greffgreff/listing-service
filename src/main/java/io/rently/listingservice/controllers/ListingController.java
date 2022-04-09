@@ -23,6 +23,7 @@ public class ListingController {
 
     @PostMapping(PREFIX + "/")
     public ResponseContent handlePostRequest(@RequestHeader("Authorization") String header, @RequestBody Listing listing) {
+        Broadcaster.debug(listing.toString());
         service.verifyOwnership(header, listing);
         service.addListing(listing);
         return new ResponseContent.Builder().setMessage("Successfully added listing to database.").build();

@@ -10,6 +10,9 @@ public class Address {
     private String city;
     private String zip;
     private String country;
+    private String formattedAddress;
+    private float lat;
+    private float lon;
 
     protected Address() { }
 
@@ -18,6 +21,9 @@ public class Address {
         this.city = builder.city;
         this.zip = builder.zip;
         this.country = builder.country;
+        this.formattedAddress = builder.formattedAddress;
+        this.lat = builder.lat;
+        this.lon = builder.lon;
     }
 
     public String getStreet() {
@@ -36,6 +42,18 @@ public class Address {
         return country;
     }
 
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public float getLat() {
+        return lat;
+    }
+
+    public float getLon() {
+        return lon;
+    }
+
     @Override
     public String toString() {
         return "Address{" +
@@ -43,6 +61,9 @@ public class Address {
                 ", city='" + city + '\'' +
                 ", zip='" + zip + '\'' +
                 ", country='" + country + '\'' +
+                ", formattedAddress='" + formattedAddress + '\'' +
+                ", lat=" + lat +
+                ", lon=" + lon +
                 '}';
     }
 
@@ -55,11 +76,20 @@ public class Address {
         private final String country;
         @JsonProperty
         private String street;
+        @JsonProperty
+        private final String formattedAddress;
+        @JsonProperty
+        private final float lat;
+        @JsonProperty
+        private final float lon;
 
-        public Builder(String city, String zip, String country) {
+        public Builder(String city, String zip, String country, String formattedAddress, float lat, float lon) {
             this.city = city;
             this.zip = zip;
             this.country = country;
+            this.formattedAddress = formattedAddress;
+            this.lat = lat;
+            this.lon = lon;
         }
 
         public Builder setStreet(String street) {

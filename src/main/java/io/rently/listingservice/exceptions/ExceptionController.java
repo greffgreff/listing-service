@@ -2,6 +2,7 @@ package io.rently.listingservice.exceptions;
 
 import io.rently.listingservice.models.ResponseContent;
 import io.rently.listingservice.utils.Broadcaster;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -20,7 +21,7 @@ public class ExceptionController {
         Broadcaster.error(exception);
         ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR;
         response.setStatus(resEx.getStatus().value());
-        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();
+        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getReason()).build();
     }
 
     @ExceptionHandler(ResponseStatusException.class)
@@ -36,7 +37,7 @@ public class ExceptionController {
     public static ResponseContent handleInvalidURI(HttpServletResponse response) {
         ResponseStatusException resEx = Errors.INVALID_URI_PATH;
         response.setStatus(resEx.getStatus().value());
-        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();
+        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getReason()).build();
     }
 
     @ResponseBody
@@ -44,6 +45,14 @@ public class ExceptionController {
     public static ResponseContent handleInvalidMethod(HttpServletResponse response) {
         ResponseStatusException resEx = Errors.INVALID_URI_PATH;
         response.setStatus(resEx.getStatus().value());
-        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getMessage()).build();
+        return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getReason()).build();
+    }
+
+    @ResponseBody
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public static ResponseContent handleInvalidFormatException(HttpServletResponse response) {
+        ResponseStatusException respEx = Errors.NO_DATA;
+        response.setStatus(respEx.getStatus().value());
+        return new ResponseContent.Builder(respEx.getStatus()).setMessage(respEx.getReason()).build();
     }
 }
