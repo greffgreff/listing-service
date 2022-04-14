@@ -47,7 +47,7 @@ public class Listing {
                 ", name='" + name + '\'' +
                 ", desc='" + desc + '\'' +
                 ", price='" + price + '\'' +
-                ", image='" + image + '\'' +
+                ", image='" + (image == null ? "none" : "present") + '\'' +
                 ", startDate='" + startDate + '\'' +
                 ", endDate='" + endDate + '\'' +
                 ", createdAt='" + createdAt + '\'' +
