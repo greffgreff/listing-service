@@ -40,6 +40,10 @@ public class Listing {
         this.phone = builder.phone;
     }
 
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "Listing{" +

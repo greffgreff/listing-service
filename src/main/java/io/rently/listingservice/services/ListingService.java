@@ -20,6 +20,9 @@ import java.util.UUID;
 public class ListingService {
 
     @Autowired
+    private ImagesService images;
+
+    @Autowired
     private ListingsRepository repository;
 
     public Listing getListingById(String id) {
@@ -30,6 +33,8 @@ public class ListingService {
     public void addListing(Listing listing) {
         Broadcaster.info("Adding listing to database: " + listing.getId());
         validateData(listing);
+        images.saveImage(listing.getId(), listing.getImage());
+        listing.setImage(ImagesService.BASE_URL + listing.getId());
         repository.insert(listing);
     }
 
@@ -44,6 +49,8 @@ public class ListingService {
             throw Errors.INVALID_REQUEST;
         }
         validateData(listing);
+        images.updateImage(listing.getId(), listing.getImage());
+        listing.setImage(ImagesService.BASE_URL + listing.getId());
         repository.deleteById(id);
         repository.insert(listing);
     }
@@ -60,7 +67,6 @@ public class ListingService {
     public void verifyOwnership(String header, String listingId) {
         Listing listing = tryFindById(listingId);
         String id = Jwt.getClaims(header).getSubject();
-
         if (!Objects.equals(id, listing.getLeaser())) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
@@ -68,7 +74,6 @@ public class ListingService {
 
     public void verifyOwnership(String header, Listing listing) {
         String id = Jwt.getClaims(header).getSubject();
-
         if (!Objects.equals(id, listing.getLeaser())) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
