@@ -1,4 +1,4 @@
-package io.rently.listingservice.services;
+package io.rently.listingservice.apis;
 
 import io.rently.listingservice.models.ResponseContent;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ImagesService {
-    public static final String BASE_URL = "http://localhost:8082/api/v1/images/";
+    public static final String BASE_URL = "http://localhost:8083/api/v1/images/";
     private final RestTemplate restTemplate;
 
     public ImagesService(RestTemplate restTemplate) {

@@ -1,5 +1,6 @@
 package io.rently.listingservice.services;
 
+import io.rently.listingservice.apis.ImagesService;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.interfaces.ListingsRepository;
