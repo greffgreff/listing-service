@@ -1,6 +1,7 @@
 package io.rently.listingservice.services;
 
 import io.rently.listingservice.utils.Broadcaster;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,8 +12,13 @@ import java.util.Map;
 
 @Component
 public class MailerService {
-    public static final String BASE_URL = "http://localhost:8084/api/v1/emails/dispatch/";
+    public static String BASE_URL;
     private static final RestTemplate restTemplate = new RestTemplate();
+
+    @Value("${mailer.baseurl}")
+    public void setBaseUrl(String baseUrl) {
+        MailerService.BASE_URL = baseUrl;
+    }
 
     public static void dispatchErrorToDevs(Exception exception) {
         Broadcaster.info("Dispatching error report...");

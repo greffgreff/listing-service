@@ -1,20 +1,18 @@
-package io.rently.listingservice.apis;
+package io.rently.listingservice.services;
 
 import io.rently.listingservice.models.ResponseContent;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ImagesService {
-    public static final String BASE_URL = "http://localhost:8083/api/v1/images/";
-    private final RestTemplate restTemplate;
+    public static String BASE_URL;
+    private static final RestTemplate restTemplate = new RestTemplate();;
 
-    public ImagesService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public ImagesService() {
-        this(new RestTemplate());
+    @Value("${images.baseurl}")
+    public void setBaseUrl(String baseUrl) {
+        ImagesService.BASE_URL = baseUrl;
     }
 
     public String getImageDataUrl(String id) {
