@@ -25,6 +25,9 @@ public class ListingService {
     @Autowired
     private ListingsRepository repository;
 
+    @Autowired
+    private Jwt jwt;
+
     public Listing getListingById(String id) {
         Broadcaster.info("Fetching listing from database: " + id);
         return tryFindById(id);
@@ -66,14 +69,14 @@ public class ListingService {
 
     public void verifyOwnership(String header, String listingId) {
         Listing listing = tryFindById(listingId);
-        String id = Jwt.getClaims(header).getSubject();
+        String id = jwt.getClaims(header).getSubject();
         if (!Objects.equals(id, listing.getLeaser())) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
     }
 
     public void verifyOwnership(String header, Listing listing) {
-        String id = Jwt.getClaims(header).getSubject();
+        String id = jwt.getClaims(header).getSubject();
         if (!Objects.equals(id, listing.getLeaser())) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }

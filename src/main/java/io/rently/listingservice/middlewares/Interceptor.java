@@ -1,16 +1,14 @@
 package io.rently.listingservice.middlewares;
 
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
@@ -21,6 +19,9 @@ import java.util.stream.Collectors;
 @Component
 public class Interceptor implements HandlerInterceptor {
     private final List<String> blackListedMethods;
+
+    @Autowired
+    private Jwt jwt;
 
     public Interceptor(RequestMethod... excludedMethods) {
         this.blackListedMethods = Arrays.stream(excludedMethods).toList().stream()
@@ -46,7 +47,7 @@ public class Interceptor implements HandlerInterceptor {
             throw Errors.INVALID_REQUEST;
         }
 
-        if (!Jwt.validateBearerToken(bearer)) {
+        if (!jwt.validateBearerToken(bearer)) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
 
