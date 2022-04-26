@@ -2,9 +2,9 @@ name: Listing Service CI CD
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master_ ]
   pull_request:
-    branches: [ master ]
+    branches: [ master_ ]
 
 jobs:
   Building:
