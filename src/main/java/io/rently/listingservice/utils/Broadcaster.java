@@ -2,6 +2,8 @@ package io.rently.listingservice.utils;
 
 import org.springframework.web.server.ResponseStatusException;
 
+import java.sql.Timestamp;
+
 public class Broadcaster {
     private static final String PREFIX = "[LISTING ENDPOINT]";
 
@@ -27,6 +29,6 @@ public class Broadcaster {
     }
 
     private static String defaultFormat(String type) {
-        return String.format("%-24s ", Utils.getCurrentTs()) + PREFIX + String.format(" %13s ", type);
+        return String.format("%-24s ", new Timestamp(System.currentTimeMillis())) + PREFIX + String.format(" %13s ", type);
     }
 }
