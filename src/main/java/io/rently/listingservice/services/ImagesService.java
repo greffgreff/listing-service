@@ -16,17 +16,17 @@ public class ImagesService {
     }
 
     public String getImageDataUrl(String id) {
-        String requestUrl = BASE_URL + id;
+        String requestUrl = BASE_URL + "api/v1/images/" + id;
         return restTemplate.getForObject(requestUrl, String.class);
     }
 
     public void saveImage(String id, Object data) {
-        String requestUrl = BASE_URL + id;
+        String requestUrl = BASE_URL + "api/v1/images/" + id;
         restTemplate.postForObject(requestUrl, data, ResponseContent.class);
     }
 
     public void updateImage(String id, Object data) {
-        String requestUrl = BASE_URL + id;
+        String requestUrl = BASE_URL + "api/v1/images/" + id;
         restTemplate.put(requestUrl, data, ResponseContent.class);
     }
 }

@@ -31,7 +31,7 @@ public class MailerService {
         report.put("trace", Arrays.toString(exception.getStackTrace()));
         report.put("exceptionType", exception.getClass());
         try {
-            restTemplate.postForObject(BASE_URL, report, String.class);
+            restTemplate.postForObject(BASE_URL + "api/v1/emails/dispatch/", report, String.class);
         } catch (Exception ex) {
             Broadcaster.warn("Could not dispatch error report.");
             Broadcaster.error(ex);
