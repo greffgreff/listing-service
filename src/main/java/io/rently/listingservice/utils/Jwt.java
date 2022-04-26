@@ -8,10 +8,12 @@ import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.rently.listingservice.exceptions.Errors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 
+@Component
 public class Jwt {
     private final DefaultJwtSignatureValidator validator;
     private final JwtParser parser;
