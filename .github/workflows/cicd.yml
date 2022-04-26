@@ -32,6 +32,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: ${{secrets.HEROKU_APP}}
-          heroku_email: ${{secrets.HEROKU_EMAIL}}
+          heroku_api_key: 69beced5-0502-4d35-bd06-933076eb0b1e
+          heroku_app_name: listing-service-rently
+          heroku_email: greffchandler80@gmail.com
