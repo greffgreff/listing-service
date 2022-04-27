@@ -1,6 +1,7 @@
 package io.rently.listingservice.services;
 
 import io.rently.listingservice.models.ResponseContent;
+import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -20,13 +21,25 @@ public class ImagesService {
         return restTemplate.getForObject(requestUrl, String.class);
     }
 
-    public void saveImage(String id, Object data) {
-        String requestUrl = BASE_URL + "api/v1/images/" + id;
-        restTemplate.postForObject(requestUrl, data, ResponseContent.class);
+    public String saveImage(String id, Object data) {
+        String requestUrl = null;
+        try {
+            requestUrl = BASE_URL + "api/v1/images/" + id;
+            restTemplate.postForObject(requestUrl, data, ResponseContent.class);
+        } catch (Exception exception) {
+            Broadcaster.warn("Could not get image url from image service: " + exception.getMessage());
+        }
+        return requestUrl;
     }
 
-    public void updateImage(String id, Object data) {
-        String requestUrl = BASE_URL + "api/v1/images/" + id;
-        restTemplate.put(requestUrl, data, ResponseContent.class);
+    public String updateImage(String id, Object data) {
+        String requestUrl = null;
+        try {
+            requestUrl = BASE_URL + "api/v1/images/" + id;
+            restTemplate.put(requestUrl, data, ResponseContent.class);
+        } catch (Exception exception) {
+            Broadcaster.warn("Could not get new image url from image service: " + exception.getMessage());
+        }
+        return requestUrl;
     }
 }

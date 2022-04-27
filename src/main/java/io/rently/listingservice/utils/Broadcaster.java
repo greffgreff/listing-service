@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.sql.Timestamp;
 
 public class Broadcaster {
-    private static final String PREFIX = "[LISTING ENDPOINT]";
+    private static final String PREFIX = "[LISTING SERVICE]";
 
     public static void debug(Object obj) {
         System.out.println(defaultFormat("[DEBUG]") + obj);

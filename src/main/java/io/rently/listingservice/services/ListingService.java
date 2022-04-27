@@ -25,9 +25,6 @@ public class ListingService {
     @Autowired
     private ListingsRepository repository;
 
-    @Autowired
-    private Jwt jwt;
-
     public Listing getListingById(String id) {
         Broadcaster.info("Fetching listing from database: " + id);
         return tryFindById(id);
@@ -36,8 +33,8 @@ public class ListingService {
     public void addListing(Listing listing) {
         Broadcaster.info("Adding listing to database: " + listing.getId());
         validateData(listing);
-        images.saveImage(listing.getId(), listing.getImage());
-        listing.setImage(ImagesService.BASE_URL + listing.getId());
+        String imageUrl = images.saveImage(listing.getId(), listing.getImage());
+        listing.setImage(imageUrl);
         repository.insert(listing);
     }
 
@@ -52,8 +49,8 @@ public class ListingService {
             throw Errors.INVALID_REQUEST;
         }
         validateData(listing);
-        images.updateImage(listing.getId(), listing.getImage());
-        listing.setImage(ImagesService.BASE_URL + listing.getId());
+        String imageUrl = images.updateImage(listing.getId(), listing.getImage());
+        listing.setImage(imageUrl);
         repository.deleteById(id);
         repository.insert(listing);
     }
@@ -69,14 +66,14 @@ public class ListingService {
 
     public void verifyOwnership(String header, String listingId) {
         Listing listing = tryFindById(listingId);
-        String id = jwt.getClaims(header).getSubject();
+        String id = Jwt.getClaims(header).getSubject();
         if (!Objects.equals(id, listing.getLeaser())) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
     }
 
     public void verifyOwnership(String header, Listing listing) {
-        String id = jwt.getClaims(header).getSubject();
+        String id = Jwt.getClaims(header).getSubject();
         if (!Objects.equals(id, listing.getLeaser())) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
