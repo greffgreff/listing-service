@@ -20,7 +20,7 @@ public class MailerService {
         MailerService.BASE_URL = baseUrl;
     }
 
-    public static void dispatchNewListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public synchronized static void dispatchNewListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending new listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "NEW_LISTING");
@@ -36,7 +36,7 @@ public class MailerService {
         }
     }
 
-    public static void dispatchUpdatedListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public synchronized static void dispatchUpdatedListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending updated listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "UPDATED_LISTING");
@@ -52,7 +52,7 @@ public class MailerService {
         }
     }
 
-    public static void dispatchDeletedListingNotification(String recipientEmail, String listingTitle, String listingDescription) {
+    public synchronized static void dispatchDeletedListingNotification(String recipientEmail, String listingTitle, String listingDescription) {
         Broadcaster.info("Sending deleted listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "LISTING_DELETION");
@@ -66,7 +66,7 @@ public class MailerService {
         }
     }
 
-    public static void dispatchErrorReportToDevs(Exception exception) {
+    public synchronized static void dispatchErrorReportToDevs(Exception exception) {
         Broadcaster.info("Dispatching error report...");
         Map<String, Object> report = new HashMap<>();
         report.put("type", "DEV_ERROR");
