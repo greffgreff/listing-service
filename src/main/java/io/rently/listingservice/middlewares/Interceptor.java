@@ -6,6 +6,7 @@ import io.rently.listingservice.utils.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -19,9 +20,6 @@ import java.util.stream.Collectors;
 @Component
 public class Interceptor implements HandlerInterceptor {
     private final List<String> blackListedMethods;
-
-    @Autowired
-    private Jwt jwt;
 
     public Interceptor(RequestMethod... excludedMethods) {
         this.blackListedMethods = Arrays.stream(excludedMethods).toList().stream()
@@ -47,7 +45,7 @@ public class Interceptor implements HandlerInterceptor {
             throw Errors.INVALID_REQUEST;
         }
 
-        if (!jwt.validateBearerToken(bearer)) {
+        if (!Jwt.validateBearerToken(bearer)) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
 
