@@ -20,9 +20,6 @@ import java.util.UUID;
 public class ListingService {
 
     @Autowired
-    private ImagesService images;
-
-    @Autowired
     private ListingsRepository repository;
 
     public Listing getListingById(String id) {
@@ -33,13 +30,19 @@ public class ListingService {
     public void addListing(Listing listing) {
         Broadcaster.info("Adding listing to database: " + listing.getId());
         validateData(listing);
-        String imageUrl = images.saveImage(listing.getId(), listing.getImage());
+        String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
+        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        String listingLink = "http://localhost:3000/listings/" + listing.getId();
+        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingLink, listing.getDesc(), listing.getImage());
         repository.insert(listing);
     }
 
     public void deleteById(String id) {
         Broadcaster.info("Removing listing from database: " + id);
+        Listing listing = tryFindById(id);
+        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        MailerService.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
         repository.deleteById(id);
     }
 
@@ -49,8 +52,11 @@ public class ListingService {
             throw Errors.INVALID_REQUEST;
         }
         validateData(listing);
-        String imageUrl = images.updateImage(listing.getId(), listing.getImage());
+        String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
+        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        String listingLink = "http://localhost:8081/api/v1/" + listing.getId();
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingLink, listing.getDesc(), listing.getImage());
         repository.deleteById(id);
         repository.insert(listing);
     }

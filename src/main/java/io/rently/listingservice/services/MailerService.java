@@ -20,7 +20,7 @@ public class MailerService {
         MailerService.BASE_URL = baseUrl;
     }
 
-    public static void dispatchNewListing(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public static void dispatchNewListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending new listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "NEW_LISTING");
@@ -32,12 +32,11 @@ public class MailerService {
         try {
             restTemplate.postForObject(BASE_URL + "api/v1/emails/dispatch/", data, String.class);
         } catch (Exception ex) {
-            Broadcaster.warn("Could not send new listing email to " + recipientEmail);
-            Broadcaster.error(ex);
+            Broadcaster.warn("Could not send new listing email to " + recipientEmail + ": " + ex.getMessage());
         }
     }
 
-    public static void dispatchUpdatedListing(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public static void dispatchUpdatedListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending updated listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "UPDATED_LISTING");
@@ -49,25 +48,25 @@ public class MailerService {
         try {
             restTemplate.postForObject(BASE_URL + "api/v1/emails/dispatch/", data, String.class);
         } catch (Exception ex) {
-            Broadcaster.warn("Could not send updated listing email to " + recipientEmail);
-            Broadcaster.error(ex);
+            Broadcaster.warn("Could not send updated listing email to " + recipientEmail + ": " + ex.getMessage());
         }
     }
 
-    public static void dispatchDeletedListing(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public static void dispatchDeletedListingNotification(String recipientEmail, String listingTitle, String listingDescription) {
         Broadcaster.info("Sending deleted listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "LISTING_DELETION");
         data.put("email", recipientEmail);
+        data.put("title", listingTitle);
+        data.put("description", listingDescription);
         try {
             restTemplate.postForObject(BASE_URL + "api/v1/emails/dispatch/", data, String.class);
         } catch (Exception ex) {
-            Broadcaster.warn("Could not send deleted listing email to " + recipientEmail);
-            Broadcaster.error(ex);
+            Broadcaster.warn("Could not send deleted listing email to " + recipientEmail + ": " + ex.getMessage());
         }
     }
 
-    public static void dispatchErrorToDevs(Exception exception) {
+    public static void dispatchErrorReportToDevs(Exception exception) {
         Broadcaster.info("Dispatching error report...");
         Map<String, Object> report = new HashMap<>();
         report.put("type", "DEV_ERROR");
@@ -80,8 +79,7 @@ public class MailerService {
         try {
             restTemplate.postForObject(BASE_URL + "api/v1/emails/dispatch/", report, String.class);
         } catch (Exception ex) {
-            Broadcaster.warn("Could not dispatch error report.");
-            Broadcaster.error(ex);
+            Broadcaster.warn("Could not dispatch error report." + ex.getMessage());
         }
     }
 }

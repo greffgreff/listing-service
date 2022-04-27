@@ -27,7 +27,7 @@ public class ExceptionController {
         Broadcaster.error(exception);
         ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR;
         response.setStatus(resEx.getStatus().value());
-        MailerService.dispatchErrorToDevs(exception);
+        MailerService.dispatchErrorReportToDevs(exception);
         bugsnag.notify(exception);
         return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getReason()).build();
     }
