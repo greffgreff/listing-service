@@ -15,21 +15,17 @@ import java.util.Date;
 
 @Component
 public class Jwt {
-    private final DefaultJwtSignatureValidator validator;
-    private final JwtParser parser;
+    private static DefaultJwtSignatureValidator validator;
+    private static JwtParser parser;
 
-    @Autowired
-    public Jwt(@Value("${server.secret}") String secret) {
-        this(secret, SignatureAlgorithm.HS256);
+    @Value("${server.secret}")
+    public void setSecret(String secret) {
+        SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
+        Jwt.validator = new DefaultJwtSignatureValidator(SignatureAlgorithm.HS256, secretKeySpec);
+        Jwt.parser = Jwts.parser().setSigningKey(secretKeySpec);
     }
 
-    public Jwt(String secret, SignatureAlgorithm algo) {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(secret.getBytes(), algo.getJcaName());
-        this.validator = new DefaultJwtSignatureValidator(algo, secretKeySpec);
-        this.parser = Jwts.parser().setSigningKey(secretKeySpec);
-    }
-
-    public boolean validateBearerToken(String token) {
+    public static boolean validateBearerToken(String token) {
         checkExpiration(token);
         String bearer = token.split(" ")[1];
         String[] chunks = bearer.split("\\.");
@@ -38,7 +34,7 @@ public class Jwt {
         return validator.isValid(tokenWithoutSignature, signature);
     }
 
-    public void checkExpiration(String token) {
+    public static void checkExpiration(String token) {
         try {
             getClaims(token);
         } catch (Exception e) {
@@ -46,7 +42,7 @@ public class Jwt {
         }
     }
 
-    public Claims getClaims(String token) {
+    public static Claims getClaims(String token) {
         String bearer = token.split(" ")[1];
         return parser.parseClaimsJws(bearer).getBody();
     }
