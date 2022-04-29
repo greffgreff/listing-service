@@ -33,14 +33,14 @@ public class ListingService {
         String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        String listingLink = "http://localhost:3000/listings/" + listing.getId();
-        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingLink, listing.getDesc(), listing.getImage());
+        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listing.getImage());
         repository.insert(listing);
     }
 
     public void deleteById(String id) {
         Broadcaster.info("Removing listing from database: " + id);
         Listing listing = tryFindById(id);
+        ImagesService.deleteImage(id);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         MailerService.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
         repository.deleteById(id);
@@ -52,11 +52,9 @@ public class ListingService {
             throw Errors.INVALID_REQUEST;
         }
         validateData(listing);
-        String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
-        listing.setImage(imageUrl);
+        ImagesService.updateImage(listing.getId(), listing.getImage());
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        String listingLink = "http://localhost:8081/api/v1/" + listing.getId();
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingLink, listing.getDesc(), listing.getImage());
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
         repository.deleteById(id);
         repository.insert(listing);
     }

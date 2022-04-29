@@ -17,24 +17,30 @@ public class ImagesService {
     }
 
     public static String saveImage(String id, Object data) {
-        String requestUrl = null;
         try {
-            requestUrl = BASE_URL + "api/v1/images/" + id;
-            restTemplate.postForObject(requestUrl, data, ResponseContent.class);
+            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            return restTemplate.postForObject(requestUrl, data, String.class);
         } catch (Exception exception) {
             Broadcaster.warn("Could not save image url from image service: " + exception.getMessage());
         }
-        return requestUrl;
+        return null;
     }
 
-    public static String updateImage(String id, Object data) {
-        String requestUrl = null;
+    public static void updateImage(String id, Object data) {
         try {
-            requestUrl = BASE_URL + "api/v1/images/" + id;
-            restTemplate.put(requestUrl, data, ResponseContent.class);
+            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            restTemplate.put(requestUrl, data, String.class);
         } catch (Exception exception) {
             Broadcaster.warn("Could not get new image url from image service: " + exception.getMessage());
         }
-        return requestUrl;
+    }
+
+    public static void deleteImage(String id) {
+        try {
+            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            restTemplate.delete(requestUrl);
+        } catch (Exception exception) {
+            Broadcaster.warn("Could not delete image url from image service: " + exception.getMessage());
+        }
     }
 }
