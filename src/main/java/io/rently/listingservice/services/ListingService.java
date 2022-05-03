@@ -34,7 +34,7 @@ public class ListingService {
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listing.getImage());
-        repository.insert(listing);
+        repository.save(listing);
     }
 
     public void deleteById(String id) {
@@ -55,8 +55,7 @@ public class ListingService {
         ImagesService.updateImage(listing.getId(), listing.getImage());
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
-        repository.deleteById(id);
-        repository.insert(listing);
+        repository.save(listing);
     }
 
     public Listing tryFindById(String id) {

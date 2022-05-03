@@ -79,7 +79,7 @@ public class MailerService {
         try {
             restTemplate.postForObject(BASE_URL + "api/v1/emails/dispatch/", report, String.class);
         } catch (Exception ex) {
-            Broadcaster.warn("Could not dispatch error report." + ex.getMessage());
+            Broadcaster.warn("Could not dispatch error report: " + ex.getMessage());
         }
     }
 }
