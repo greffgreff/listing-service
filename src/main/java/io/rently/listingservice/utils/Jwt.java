@@ -52,7 +52,7 @@ public class Jwt {
     public static String generateBearerToken() {
         String id = UUID.randomUUID().toString();
         Date iat = new Date();
-        Date ext =  new Date(System.currentTimeMillis() + 5000L);
+        Date ext =  new Date(System.currentTimeMillis() + 60000L);
 
         return Jwts.builder()
                 .setId(id)
