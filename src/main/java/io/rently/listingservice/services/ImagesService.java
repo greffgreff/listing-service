@@ -1,6 +1,5 @@
 package io.rently.listingservice.services;
 
-import io.rently.listingservice.models.ResponseContent;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 @Component
 public class ImagesService {
@@ -35,16 +32,17 @@ public class ImagesService {
         return null;
     }
 
-    public static void updateImage(String id, Object data) {
+    public static String updateImage(String id, Object data) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(Jwt.generateBearerToken());
         HttpEntity<Object> body = new HttpEntity<>(data, headers);
         try {
             String requestUrl = BASE_URL + "api/v1/images/" + id;
-            restTemplate.put(requestUrl, body, String.class);
+            return restTemplate.exchange(requestUrl, HttpMethod.PUT, body, String.class).getBody();
         } catch (Exception exception) {
             Broadcaster.warn("Could not get new image url from image service: " + exception.getMessage());
         }
+        return null;
     }
 
     public static void deleteImage(String id) {
