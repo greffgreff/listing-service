@@ -54,13 +54,11 @@ public class Jwt {
         Date iat = new Date();
         Date ext =  new Date(System.currentTimeMillis() + 5000L);
 
-        String token = Jwts.builder()
+        return Jwts.builder()
                 .setId(id)
                 .setIssuedAt(iat)
                 .setExpiration(ext)
                 .signWith(algo, secretKeySpec)
                 .compact();
-
-        return "Bearer " + token;
     }
 }
