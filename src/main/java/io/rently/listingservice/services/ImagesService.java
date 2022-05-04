@@ -1,6 +1,5 @@
 package io.rently.listingservice.services;
 
-import io.rently.listingservice.models.ResponseContent;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,8 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.Map;
 
 @Component
 public class ImagesService {

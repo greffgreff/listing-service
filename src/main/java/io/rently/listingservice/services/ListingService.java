@@ -1,8 +1,8 @@
 package io.rently.listingservice.services;
 
 import io.rently.listingservice.exceptions.Errors;
-import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.interfaces.ListingsRepository;
+import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import io.rently.listingservice.utils.Validation;

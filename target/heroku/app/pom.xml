@@ -71,6 +71,12 @@
 			<artifactId>json</artifactId>
 			<version>20220320</version>
 		</dependency>
+
+		<!-- Runtime, com.sun.xml.bind module -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
