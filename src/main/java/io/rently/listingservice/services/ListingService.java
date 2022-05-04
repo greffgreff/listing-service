@@ -37,6 +37,19 @@ public class ListingService {
         repository.save(listing);
     }
 
+    public void putById(String id, Listing listing) {
+        Broadcaster.info("Updating listing from database: " + id);
+        if (!Objects.equals(id, listing.getId())) {
+            throw Errors.INVALID_REQUEST;
+        }
+        validateData(listing);
+        String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
+        listing.setImage(imageUrl);
+        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
+        repository.save(listing);
+    }
+
     public void deleteById(String id) {
         Broadcaster.info("Removing listing from database: " + id);
         Listing listing = tryFindById(id);
@@ -44,18 +57,6 @@ public class ListingService {
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         MailerService.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
         repository.deleteById(id);
-    }
-
-    public void putById(String id, Listing listing) {
-        Broadcaster.info("Updating listing from database: " + id);
-        if (!Objects.equals(id, listing.getId())) {
-            throw Errors.INVALID_REQUEST;
-        }
-        validateData(listing);
-        ImagesService.updateImage(listing.getId(), listing.getImage());
-        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
-        repository.save(listing);
     }
 
     public Listing tryFindById(String id) {
