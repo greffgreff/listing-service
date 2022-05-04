@@ -13,12 +13,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1")
 public class ListingController {
 
-    @GetMapping
-    public String send() {
-        MailerService.dispatchNewListingNotification("greffchandler80@gmail.com", "abc", "abc", "abc", "abc");
-        return "sent";
-    }
-
     @Autowired
     public ListingService service;
 
