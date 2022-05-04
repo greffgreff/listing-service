@@ -3,6 +3,7 @@ package io.rently.listingservice.controllers;
 import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.models.ResponseContent;
 import io.rently.listingservice.services.ListingService;
+import io.rently.listingservice.services.MailerService;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
