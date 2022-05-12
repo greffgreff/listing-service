@@ -1,8 +1,8 @@
 package io.rently.listingservice.services;
 
 import io.rently.listingservice.exceptions.Errors;
-import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.interfaces.ListingsRepository;
+import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import io.rently.listingservice.utils.Validation;
@@ -34,7 +34,20 @@ public class ListingService {
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listing.getImage());
-        repository.insert(listing);
+        repository.save(listing);
+    }
+
+    public void putById(String id, Listing listing) {
+        Broadcaster.info("Updating listing from database: " + id);
+        if (!Objects.equals(id, listing.getId())) {
+            throw Errors.INVALID_REQUEST;
+        }
+        validateData(listing);
+        String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
+        listing.setImage(imageUrl);
+        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
+        repository.save(listing);
     }
 
     public void deleteById(String id) {
@@ -44,19 +57,6 @@ public class ListingService {
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         MailerService.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
         repository.deleteById(id);
-    }
-
-    public void putById(String id, Listing listing) {
-        Broadcaster.info("Updating listing from database: " + id);
-        if (!Objects.equals(id, listing.getId())) {
-            throw Errors.INVALID_REQUEST;
-        }
-        validateData(listing);
-        ImagesService.updateImage(listing.getId(), listing.getImage());
-        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
-        repository.deleteById(id);
-        repository.insert(listing);
     }
 
     public Listing tryFindById(String id) {

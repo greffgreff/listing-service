@@ -29,6 +29,6 @@ public class Broadcaster {
     }
 
     private static String defaultFormat(String type) {
-        return String.format("%-24s ", new Timestamp(System.currentTimeMillis())) + PREFIX + String.format(" %13s ", type);
+        return String.format("%-24s ", new Timestamp(System.currentTimeMillis())) + PREFIX + String.format(" %14s ", type);
     }
 }
