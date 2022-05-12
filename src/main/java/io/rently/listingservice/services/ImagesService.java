@@ -24,7 +24,6 @@ public class ImagesService {
         headers.setBearerAuth(Jwt.generateBearerToken());
         HttpEntity<Object> body = new HttpEntity<>(data, headers);
         try {
-            Broadcaster.debug(BASE_URL + "api/v1/images/" + id);
             String requestUrl = BASE_URL + "api/v1/images/" + id;
             return restTemplate.postForObject(requestUrl, body, String.class);
         } catch (Exception exception) {
