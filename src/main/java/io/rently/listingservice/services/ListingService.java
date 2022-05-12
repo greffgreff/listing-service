@@ -70,21 +70,6 @@ public class ListingService {
         }
     }
 
-    public void verifyOwnership(String header, String listingId) {
-        Listing listing = tryFindById(listingId);
-        String id = Jwt.getClaims(header).getSubject();
-        if (!Objects.equals(id, listing.getLeaser())) {
-            throw Errors.UNAUTHORIZED_REQUEST;
-        }
-    }
-
-    public void verifyOwnership(String header, Listing listing) {
-        String id = Jwt.getClaims(header).getSubject();
-        if (!Objects.equals(id, listing.getLeaser())) {
-            throw Errors.UNAUTHORIZED_REQUEST;
-        }
-    }
-
     private static void validateData(Listing listing) {
         if (listing == null) {
             throw Errors.NO_DATA;
