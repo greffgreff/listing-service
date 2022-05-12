@@ -44,6 +44,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+        run: mvn clean install
       - uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
