@@ -18,6 +18,7 @@ public class ImagesService {
 
     public static String saveImage(String id, Object data) {
         try {
+            Broadcaster.debug(BASE_URL + "api/v1/images/" + id);
             String requestUrl = BASE_URL + "api/v1/images/" + id;
             return restTemplate.postForObject(requestUrl, data, String.class);
         } catch (Exception exception) {
