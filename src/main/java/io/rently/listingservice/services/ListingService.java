@@ -36,21 +36,18 @@ public class ListingService {
         String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        String listingUrl = baseUrl + "listing/" + listing.getId();
+        String listingUrl = baseUrl + "listings/" + listing.getId();
         MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
         repository.save(listing);
     }
 
     public void putById(String id, Listing listing) {
         Broadcaster.info("Updating listing from database: " + id);
-        if (!Objects.equals(id, listing.getId())) {
-            throw Errors.INVALID_REQUEST;
-        }
         validateData(listing);
         String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        String listingUrl = baseUrl + "listing/" + listing.getId();
+        String listingUrl = baseUrl + "listings/" + listing.getId();
         MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
         repository.save(listing);
     }
