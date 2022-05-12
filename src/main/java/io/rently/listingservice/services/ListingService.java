@@ -22,7 +22,7 @@ public class ListingService {
 
     @Autowired
     private ListingsRepository repository;
-    @Value("${server.baseurl}")
+    @Value("${rently.baseurl}")
     public String baseUrl;
 
     public Listing getListingById(String id) {
@@ -36,7 +36,7 @@ public class ListingService {
         String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        String listingUrl = baseUrl + "api/v1/" + listing.getId();
+        String listingUrl = baseUrl + "listing/" + listing.getId();
         MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
         repository.save(listing);
     }
@@ -50,7 +50,7 @@ public class ListingService {
         String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        String listingUrl = baseUrl + "api/v1/" + listing.getId();
+        String listingUrl = baseUrl + "listing/" + listing.getId();
         MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
         repository.save(listing);
     }
