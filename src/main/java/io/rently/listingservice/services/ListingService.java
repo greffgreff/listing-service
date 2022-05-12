@@ -7,6 +7,7 @@ import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class ListingService {
 
     @Autowired
     private ListingsRepository repository;
+    @Value("${server.baseurl}")
+    public String baseUrl;
 
     public Listing getListingById(String id) {
         Broadcaster.info("Fetching listing from database: " + id);
@@ -33,7 +36,8 @@ public class ListingService {
         String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listing.getImage());
+        String listingUrl = baseUrl + "api/v1/" + listing.getId();
+        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listingUrl);
         repository.save(listing);
     }
 
@@ -46,7 +50,8 @@ public class ListingService {
         String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
+        String listingUrl = baseUrl + "api/v1/" + listing.getId();
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listingUrl);
         repository.save(listing);
     }
 
