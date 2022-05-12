@@ -37,7 +37,7 @@ public class ListingService {
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "api/v1/" + listing.getId();
-        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listingUrl);
+        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
         repository.save(listing);
     }
 
@@ -51,7 +51,7 @@ public class ListingService {
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "api/v1/" + listing.getId();
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listingUrl);
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
         repository.save(listing);
     }
 
