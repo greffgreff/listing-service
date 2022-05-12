@@ -14,7 +14,7 @@ public class ImagesService {
     public static String BASE_URL;
     private static final RestTemplate restTemplate = new RestTemplate();;
 
-    @Value("${images.baseurl}")
+    @Value("${rently.baseurl}")
     public void setBaseUrl(String baseUrl) {
         ImagesService.BASE_URL = baseUrl;
     }
@@ -24,7 +24,7 @@ public class ImagesService {
         headers.setBearerAuth(Jwt.generateBearerToken());
         HttpEntity<Object> body = new HttpEntity<>(data, headers);
         try {
-            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            String requestUrl = BASE_URL + "listings/" + id;
             return restTemplate.postForObject(requestUrl, body, String.class);
         } catch (Exception exception) {
             Broadcaster.warn("Could not save image url from image service: " + exception.getMessage());
