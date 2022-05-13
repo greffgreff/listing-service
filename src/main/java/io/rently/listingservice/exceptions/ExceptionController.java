@@ -20,15 +20,23 @@ public class ExceptionController {
 
     @Autowired
     private Bugsnag bugsnag;
+    @Autowired
+    private MailerService mailer;
 
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public ResponseContent unhandledExceptions(HttpServletResponse response, Exception exception) {
+    public ResponseContent unhandledException(HttpServletResponse response, Exception exception) {
         Broadcaster.error(exception);
+        exception.printStackTrace();
+        bugsnag.notify(exception);
+        try {
+            mailer.dispatchErrorReportToDevs(exception);
+        } catch (Exception ex) {
+            Broadcaster.warn("Could not dispatch error report.");
+            Broadcaster.error(ex);
+        }
         ResponseStatusException resEx = Errors.INTERNAL_SERVER_ERROR;
         response.setStatus(resEx.getStatus().value());
-        MailerService.dispatchErrorReportToDevs(exception);
-        bugsnag.notify(exception);
         return new ResponseContent.Builder(resEx.getStatus()).setMessage(resEx.getReason()).build();
     }
 

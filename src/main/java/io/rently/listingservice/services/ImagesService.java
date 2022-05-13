@@ -11,20 +11,23 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class ImagesService {
-    public static String BASE_URL;
-    private static final RestTemplate restTemplate = new RestTemplate();;
 
-    @Value("${images.baseurl}")
-    public void setBaseUrl(String baseUrl) {
-        ImagesService.BASE_URL = baseUrl;
+    private final RestTemplate restTemplate;
+    private final Jwt jwt;
+    private final String endPointUrl;
+
+    public ImagesService(Jwt jwt, String baseUrl, RestTemplate restTemplate) {
+        this.jwt = jwt;
+        this.endPointUrl = baseUrl + "api/v1/images/";
+        this.restTemplate = restTemplate;
     }
 
-    public static String saveImage(String id, Object data) {
+    public String saveImage(String id, Object data) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(Jwt.generateBearerToken());
+        headers.setBearerAuth(jwt.generateBearToken());
         HttpEntity<Object> body = new HttpEntity<>(data, headers);
         try {
-            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            String requestUrl = endPointUrl + id;
             return restTemplate.postForObject(requestUrl, body, String.class);
         } catch (Exception exception) {
             Broadcaster.warn("Could not save image url from image service: " + exception.getMessage());
@@ -32,12 +35,12 @@ public class ImagesService {
         return null;
     }
 
-    public static String updateImage(String id, Object data) {
+    public String updateImage(String id, Object data) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(Jwt.generateBearerToken());
+        headers.setBearerAuth(jwt.generateBearToken());
         HttpEntity<Object> body = new HttpEntity<>(data, headers);
         try {
-            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            String requestUrl = endPointUrl + id;
             return restTemplate.exchange(requestUrl, HttpMethod.PUT, body, String.class).getBody();
         } catch (Exception exception) {
             Broadcaster.warn("Could not get new image url from image service: " + exception.getMessage());
@@ -45,12 +48,12 @@ public class ImagesService {
         return null;
     }
 
-    public static void deleteImage(String id) {
+    public void deleteImage(String id) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(Jwt.generateBearerToken());
+        headers.setBearerAuth(jwt.generateBearToken());
         HttpEntity<String> body = new HttpEntity<>(null, headers);
         try {
-            String requestUrl = BASE_URL + "api/v1/images/" + id;
+            String requestUrl = endPointUrl + id;
             restTemplate.exchange(requestUrl, HttpMethod.DELETE, body, String.class);
         } catch (Exception exception) {
             Broadcaster.warn("Could not delete image url from image service: " + exception.getMessage());

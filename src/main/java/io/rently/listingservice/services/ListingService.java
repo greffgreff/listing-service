@@ -24,6 +24,10 @@ public class ListingService {
     private ListingsRepository repository;
     @Value("${rently.baseurl}")
     public String baseUrl;
+    @Autowired
+    public ImagesService imagesService;
+    @Autowired
+    private MailerService mailer;
 
     public Listing getListingById(String id) {
         Broadcaster.info("Fetching listing from database: " + id);
@@ -33,11 +37,11 @@ public class ListingService {
     public void addListing(Listing listing) {
         Broadcaster.info("Adding listing to database: " + listing.getId());
         validateData(listing);
-        String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
+        String imageUrl = imagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
-        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
+        mailer.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
     }
 
@@ -45,21 +49,21 @@ public class ListingService {
         Broadcaster.info("Updating listing from database: " + id);
         validateData(listing);
         if (!listing.getImage().matches("(www|http:|https:)+[^\\s]+[\\w]")) {
-            String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
+            String imageUrl = imagesService.updateImage(listing.getId(), listing.getImage());
             listing.setImage(imageUrl);
         }
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
+        mailer.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
     }
 
     public void deleteById(String id) {
         Broadcaster.info("Removing listing from database: " + id);
         Listing listing = tryFindById(id);
-        ImagesService.deleteImage(id);
+        imagesService.deleteImage(id);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
+        mailer.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
         repository.deleteById(id);
     }
 
