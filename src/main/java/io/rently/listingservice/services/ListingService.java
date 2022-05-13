@@ -37,18 +37,20 @@ public class ListingService {
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
-        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
+        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
     }
 
     public void putById(String id, Listing listing) {
         Broadcaster.info("Updating listing from database: " + id);
         validateData(listing);
-        String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
-        listing.setImage(imageUrl);
+        if (!listing.getImage().matches("(www|http:|https:)+[^\\s]+[\\w]")) {
+            String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
+            listing.setImage(imageUrl);
+        }
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), imageUrl);
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
     }
 
