@@ -7,6 +7,7 @@ import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,8 @@ public class ListingService {
 
     @Autowired
     private ListingsRepository repository;
+    @Value("${rently.baseurl}")
+    public String baseUrl;
 
     public Listing getListingById(String id) {
         Broadcaster.info("Fetching listing from database: " + id);
@@ -33,20 +36,21 @@ public class ListingService {
         String imageUrl = ImagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), imageUrl, listing.getDesc(), listing.getImage());
+        String listingUrl = baseUrl + "listings/" + listing.getId();
+        MailerService.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
     }
 
     public void putById(String id, Listing listing) {
         Broadcaster.info("Updating listing from database: " + id);
-        if (!Objects.equals(id, listing.getId())) {
-            throw Errors.INVALID_REQUEST;
-        }
         validateData(listing);
-        String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
-        listing.setImage(imageUrl);
+        if (!listing.getImage().matches("(www|http:|https:)+[^\\s]+[\\w]")) {
+            String imageUrl = ImagesService.updateImage(listing.getId(), listing.getImage());
+            listing.setImage(imageUrl);
+        }
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
-        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listing.getImage(), listing.getDesc(), listing.getImage());
+        String listingUrl = baseUrl + "listings/" + listing.getId();
+        MailerService.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
     }
 
@@ -65,21 +69,6 @@ public class ListingService {
             return listing.get();
         } else {
             throw Errors.LISTING_NOT_FOUND;
-        }
-    }
-
-    public void verifyOwnership(String header, String listingId) {
-        Listing listing = tryFindById(listingId);
-        String id = Jwt.getClaims(header).getSubject();
-        if (!Objects.equals(id, listing.getLeaser())) {
-            throw Errors.UNAUTHORIZED_REQUEST;
-        }
-    }
-
-    public void verifyOwnership(String header, Listing listing) {
-        String id = Jwt.getClaims(header).getSubject();
-        if (!Objects.equals(id, listing.getLeaser())) {
-            throw Errors.UNAUTHORIZED_REQUEST;
         }
     }
 
