@@ -42,6 +42,10 @@ public class ListingService {
         String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
         mailer.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
+        Optional<Listing> existingListing = repository.findById(listing.getId());
+        if (existingListing.isPresent()) {
+            throw Errors.LISTING_ALREADY_EXISTS;
+        }
         repository.save(listing);
     }
 
