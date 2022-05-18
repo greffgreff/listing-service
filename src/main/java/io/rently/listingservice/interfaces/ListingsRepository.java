@@ -1,11 +1,7 @@
 package io.rently.listingservice.interfaces;
 
-import io.rently.listingservice.models.Listing;
+import io.rently.listingservice.dtos.Listing;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
-import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
 
 public interface ListingsRepository extends MongoRepository<Listing, String> {
 

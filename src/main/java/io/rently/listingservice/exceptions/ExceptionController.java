@@ -1,7 +1,7 @@
 package io.rently.listingservice.exceptions;
 
 import com.bugsnag.Bugsnag;
-import io.rently.listingservice.models.ResponseContent;
+import io.rently.listingservice.dtos.ResponseContent;
 import io.rently.listingservice.components.MailerService;
 import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;

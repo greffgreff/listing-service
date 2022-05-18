@@ -1,4 +1,4 @@
-package io.rently.listingservice.models;
+package io.rently.listingservice.dtos;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
