@@ -95,7 +95,7 @@ class ListingControllerTest {
     void handleGetRequest_validListingId_returnListing() throws Exception {
         doReturn(Optional.of(validListingData)).when(repository).findById(validListingId);
 
-        ResultActions response = mvc.perform(get("/api/v2/users/{id}", validListingId));
+        ResultActions response = mvc.perform(get("/api/v1/{id}", validListingId));
 
         String responseJson = response.andReturn().getResponse().getContentAsString();
         response.andExpect(MockMvcResultMatchers.status().isOk());
@@ -112,7 +112,7 @@ class ListingControllerTest {
         validListingData.setId("invalidId");
         String jsonBody = new ObjectMapper().writeValueAsString(validListingData);
 
-        ResultActions response = mvc.perform(post("/api/v2/users/")
+        ResultActions response = mvc.perform(post("/api/v1/")
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
@@ -129,7 +129,7 @@ class ListingControllerTest {
     void handlePostRequest_validListingData_successMsg() throws Exception {
         String jsonBody = new ObjectMapper().writeValueAsString(validListingData);
 
-        ResultActions response = mvc.perform(post("/api/v2/users/")
+        ResultActions response = mvc.perform(post("/api/v1/")
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
@@ -147,7 +147,7 @@ class ListingControllerTest {
         validListingData.setId("invalidId");
         String jsonBody = new ObjectMapper().writeValueAsString(validListingData);
 
-        ResultActions response = mvc.perform(put("/api/v2/users/{id}", validListingId)
+        ResultActions response = mvc.perform(put("/api/v1/{id}", validListingId)
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
@@ -166,7 +166,7 @@ class ListingControllerTest {
 
         doReturn(Optional.of(validListingData)).when(repository).findById(validListingId);
 
-        ResultActions response = mvc.perform(put("/api/v2/users/{id}", validListingId)
+        ResultActions response = mvc.perform(put("/api/v1/{id}", validListingId)
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
@@ -181,7 +181,7 @@ class ListingControllerTest {
 
     @Test
     void handleDeleteRequest_mismatchedDataHolderIds_throwUnauthorized() throws Exception {
-        ResultActions response = mvc.perform(delete("/api/v2/users/{id}", "invalidId")
+        ResultActions response = mvc.perform(delete("/api/v1/{id}", "invalidId")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
         String responseJson = response.andReturn().getResponse().getContentAsString();
@@ -197,7 +197,7 @@ class ListingControllerTest {
     void handleDeleteRequest_validListingId_successMsg() throws Exception {
         doReturn(Optional.of(validListingData)).when(repository).findById(validListingId);
 
-        ResultActions response = mvc.perform(delete("/api/v2/users/{id}", validListingId)
+        ResultActions response = mvc.perform(delete("/api/v1/{id}", validListingId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
         String responseJson = response.andReturn().getResponse().getContentAsString();
