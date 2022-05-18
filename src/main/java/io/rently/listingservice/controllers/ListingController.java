@@ -7,6 +7,7 @@ import io.rently.listingservice.services.ListingService;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class ListingController {
         return new ResponseContent.Builder().setData(listing).build();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/")
     public ResponseContent handlePostRequest(@RequestHeader("Authorization") String header, @RequestBody Listing listing) {
         verifyOwnership(header, listing.getLeaser());
