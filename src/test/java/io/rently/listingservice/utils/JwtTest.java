@@ -1,5 +1,6 @@
 package io.rently.listingservice.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.rently.listingservice.configs.BugsnagTestConfigs;
@@ -111,7 +112,17 @@ class JwtTest {
     }
 
     @Test
-    void getParser() {
-        assert jwt.getParser() != null;
+    void getClaims_returnsClaims() {
+        Date validDate = new Date(System.currentTimeMillis() + 60000L);
+        String token = Jwts.builder()
+                .setIssuedAt(validDate)
+                .setExpiration(validDate)
+                .signWith(ALGORITHM, SECRET_KEY_SPEC)
+                .compact();
+
+        Claims claims = jwt.getClaims(token);
+
+        assert claims.getExpiration() == validDate;
+//        assert claims.getIssuedAt() == validDate;
     }
 }
