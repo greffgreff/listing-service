@@ -1,10 +1,12 @@
 package io.rently.listingservice.services;
 
+import io.rently.listingservice.components.ImagesService;
+import io.rently.listingservice.components.MailerService;
+import io.rently.listingservice.components.UserService;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.interfaces.ListingsRepository;
 import io.rently.listingservice.models.Listing;
 import io.rently.listingservice.utils.Broadcaster;
-import io.rently.listingservice.utils.Jwt;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +14,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 

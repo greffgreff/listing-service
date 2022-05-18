@@ -1,4 +1,4 @@
-package io.rently.listingservice.services;
+package io.rently.listingservice.components;
 
 import io.rently.listingservice.utils.Broadcaster;
 import org.json.JSONObject;

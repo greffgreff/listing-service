@@ -2,8 +2,8 @@ package io.rently.listingservice.configs;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.rently.listingservice.middlewares.Interceptor;
-import io.rently.listingservice.services.ImagesService;
-import io.rently.listingservice.services.MailerService;
+import io.rently.listingservice.components.ImagesService;
+import io.rently.listingservice.components.MailerService;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import org.springframework.beans.factory.annotation.Value;
