@@ -1,6 +1,7 @@
 package io.rently.listingservice.components;
 
 import io.rently.listingservice.utils.Broadcaster;
+import io.rently.listingservice.utils.Jwt;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,16 +9,17 @@ import org.springframework.web.client.RestTemplate;
 
 @Component
 public class UserService {
-    public static String BASE_URL;
-    private static final RestTemplate restTemplate = new RestTemplate();
 
-    @Value("${users.baseurl}")
-    public void setBaseUrl(String baseUrl) {
-        UserService.BASE_URL = baseUrl;
+    private final RestTemplate restTemplate;
+    private final String endPointUrl;
+
+    public UserService(String endPointUrl, RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+        this.endPointUrl = endPointUrl;
     }
 
-    public static String fetchUserEmailById(String id) {
-        String requestUrl = BASE_URL + "api/v2/users/" + id;
+    public String fetchUserEmailById(String id) {
+        String requestUrl = endPointUrl + "api/v2/users/" + id;
         String email = null;
         try {
             String userData = restTemplate.getForObject(requestUrl, String.class);

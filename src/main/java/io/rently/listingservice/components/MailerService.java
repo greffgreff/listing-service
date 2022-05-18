@@ -25,6 +25,7 @@ public class MailerService {
         this.endPointUrl = baseUrl + "api/v1/emails/dispatch/";
         this.restTemplate = restTemplate;
     }
+
     public void dispatchNewListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending new listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();

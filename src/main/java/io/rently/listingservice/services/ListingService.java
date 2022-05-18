@@ -29,6 +29,8 @@ public class ListingService {
     public ImagesService imagesService;
     @Autowired
     private MailerService mailer;
+    @Autowired
+    private UserService userService;
 
     public Listing getListingById(String id) {
         Broadcaster.info("Fetching listing from database: " + id);
@@ -40,7 +42,7 @@ public class ListingService {
         validateData(listing);
         String imageUrl = imagesService.saveImage(listing.getId(), listing.getImage());
         listing.setImage(imageUrl);
-        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        String userEmail = userService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
         mailer.dispatchNewListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         Optional<Listing> existingListing = repository.findById(listing.getId());
@@ -57,7 +59,7 @@ public class ListingService {
             String imageUrl = imagesService.updateImage(listing.getId(), listing.getImage());
             listing.setImage(imageUrl);
         }
-        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        String userEmail = userService.fetchUserEmailById(listing.getLeaser());
         String listingUrl = baseUrl + "listings/" + listing.getId();
         mailer.dispatchUpdatedListingNotification(userEmail, listing.getName(), listingUrl, listing.getDesc(), listing.getImage());
         repository.save(listing);
@@ -67,7 +69,7 @@ public class ListingService {
         Broadcaster.info("Removing listing from database: " + id);
         Listing listing = tryFindById(id);
         imagesService.deleteImage(id);
-        String userEmail = UserService.fetchUserEmailById(listing.getLeaser());
+        String userEmail = userService.fetchUserEmailById(listing.getLeaser());
         mailer.dispatchDeletedListingNotification(userEmail, listing.getName(), listing.getDesc());
         repository.deleteById(id);
     }
