@@ -18,13 +18,12 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@EnableMongoRepositories(basePackageClasses = ListingsRepository.class)
 public class ListingService {
 
-    @Autowired
-    private ListingsRepository repository;
     @Value("${rently.baseurl}")
     public String baseUrl;
+    @Autowired
+    private ListingsRepository repository;
     @Autowired
     public ImagesService imagesService;
     @Autowired
