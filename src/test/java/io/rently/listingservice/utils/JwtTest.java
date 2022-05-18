@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -122,7 +123,7 @@ class JwtTest {
 
         Claims claims = jwt.getClaims(token);
 
-        assert claims.getExpiration() == validDate;
-//        assert claims.getIssuedAt() == validDate;
+        assert Objects.equals(new Date(claims.getExpiration().getTime()).toString(), validDate.toString());
+        assert Objects.equals(new Date(claims.getIssuedAt().getTime()).toString(), validDate.toString());
     }
 }
