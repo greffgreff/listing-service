@@ -52,7 +52,6 @@ public class ListingController {
     protected void verifyOwnership(String bearer, String userId) {
         String token = bearer.split(" ")[1];
         String id;
-        Broadcaster.info(token);
         try {
             id = jwt.getParser().parseClaimsJws(token).getBody().getSubject();
         } catch (Exception ignore) {
