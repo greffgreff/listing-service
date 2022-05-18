@@ -37,7 +37,7 @@ public class ListingController {
 
     @DeleteMapping("/{id}")
     public ResponseContent handleDeleteRequest(@RequestHeader("Authorization") String header, @PathVariable String id) {
-//        verifyOwnership(header, id);
+        verifyOwnership(header, id);
         service.deleteById(id);
         return new ResponseContent.Builder().setMessage("Successfully removed listing from database.").build();
     }
