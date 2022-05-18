@@ -54,6 +54,7 @@ public class ListingService {
     public void putById(String id, Listing listing) {
         Broadcaster.info("Updating listing from database: " + id);
         validateData(listing);
+        tryFindById(id);
         if (listing.getImage() != null && !listing.getImage().matches("(www|http:|https:)+[^\\s]+[\\w]")) {
             String imageUrl = imagesService.updateImage(listing.getId(), listing.getImage());
             listing.setImage(imageUrl);
