@@ -58,7 +58,7 @@ public class Jwt {
                 .compact();
     }
 
-    public JwtParser getParser() {
-        return parser;
+    public Claims getClaims(String token) {
+        return parser.parseClaimsJws(token).getBody();
     }
 }

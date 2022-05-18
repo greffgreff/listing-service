@@ -53,7 +53,7 @@ public class ListingController {
         String token = bearer.split(" ")[1];
         String id;
         try {
-            id = jwt.getParser().parseClaimsJws(token).getBody().getSubject();
+            id = jwt.getClaims(token).getSubject();
         } catch (Exception ignore) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
