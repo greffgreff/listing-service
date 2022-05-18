@@ -47,10 +47,6 @@ class MailerServiceTest {
     }
 
     @Test
-    void dispatchErrorReportToDevs() {
-    }
-
-    @Test
     void dispatchErrorToDevs_nonEmptyException_void() {
         Exception exception = new Exception("My exception", new Throwable("My cause"));
 
@@ -64,7 +60,7 @@ class MailerServiceTest {
                     assert body.toString().contains("message=" + exception.getMessage());
                     assert body.toString().contains("cause=" + exception.getCause());
                     assert body.toString().contains("trace=" + Arrays.toString(exception.getStackTrace()));
-                    assert body.toString().contains("service=User service");
+                    assert body.toString().contains("service=Listing service");
                     assert body.toString().contains("exceptionType=" + exception.getClass());
                     assert body.toString().contains("Authorization");
                     return true;
@@ -75,8 +71,6 @@ class MailerServiceTest {
 
     @Test
     void dispatchErrorToDevs_emptyException_nullExceptionThrown() {
-        Exception exception = null;
-
-        assertThrows(NullPointerException.class, () -> mailerService.dispatchErrorReportToDevs(exception));
+        assertThrows(NullPointerException.class, () -> mailerService.dispatchErrorReportToDevs(null));
     }
 }
