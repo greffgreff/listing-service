@@ -1,4 +1,4 @@
-name: Listing Service CI CD
+name: Listing Service CD
 
 on:
   push:
