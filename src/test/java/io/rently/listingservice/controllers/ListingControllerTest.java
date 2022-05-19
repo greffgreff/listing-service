@@ -3,6 +3,7 @@ package io.rently.listingservice.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.rently.listingservice.components.UserService;
 import io.rently.listingservice.configs.ListingControllerTestConfigs;
 import io.rently.listingservice.dtos.Listing;
 import io.rently.listingservice.interfaces.ListingsRepository;
@@ -52,8 +53,10 @@ class ListingControllerTest {
     public static final SignatureAlgorithm ALGORITHM = SignatureAlgorithm.HS384;
     public static final SecretKeySpec SECRET_KEY_SPEC = new SecretKeySpec(SECRET.getBytes(), ALGORITHM.getJcaName());
     public String token;
-    public String validListingId = UUID.randomUUID().toString();
+    public String validLeaserId = UUID.randomUUID().toString();
     public Listing validListingData;
+    @Autowired
+    public UserService service;
 
     @BeforeEach
     public void generateValidJwt() {
@@ -61,7 +64,7 @@ class ListingControllerTest {
         token = Jwts.builder()
                 .setIssuedAt(expiredDate)
                 .setExpiration(expiredDate)
-                .setSubject(validListingId)
+                .setSubject(validLeaserId)
                 .signWith(ALGORITHM, SECRET_KEY_SPEC)
                 .compact();
 
@@ -79,7 +82,7 @@ class ListingControllerTest {
         validListingData = new Listing();
         validListingData.setId(UUID.randomUUID().toString());
         validListingData.setImage("imageURL");
-        validListingData.setLeaser(UUID.randomUUID().toString());
+        validListingData.setLeaser(validLeaserId);
         validListingData.setName("My listing");
         validListingData.setDesc("A description");
         validListingData.setPhone("+1 07 12 23 34 45");
@@ -92,10 +95,10 @@ class ListingControllerTest {
     }
 
     @Test
-    void handleGetRequest_validListingId_returnListing() throws Exception {
-        doReturn(Optional.of(validListingData)).when(repository).findById(validListingId);
+    void handleGetRequest_validLeaserId_returnListing() throws Exception {
+        doReturn(Optional.of(validListingData)).when(repository).findById(validLeaserId);
 
-        ResultActions response = mvc.perform(get("/api/v1/{id}", validListingId));
+        ResultActions response = mvc.perform(get("/api/v1/{id}", validLeaserId));
 
         String responseJson = response.andReturn().getResponse().getContentAsString();
         response.andExpect(MockMvcResultMatchers.status().isOk());
@@ -104,12 +107,12 @@ class ListingControllerTest {
         response.andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isNotEmpty());
         response.andExpect(MockMvcResultMatchers.jsonPath("$.message").doesNotExist());
         response.andExpect(MockMvcResultMatchers.jsonPath("$.content").isNotEmpty());
-        assert responseJson.contains(validListingId);
+        assert responseJson.contains(validLeaserId);
     }
 
     @Test
     void handlePostRequest_mismatchedDataHolderIds_throwUnauthorized() throws Exception {
-        validListingData.setId("invalidId");
+        validListingData.setLeaser("invalidId");
         String jsonBody = new ObjectMapper().writeValueAsString(validListingData);
 
         ResultActions response = mvc.perform(post("/api/v1/")
@@ -144,10 +147,10 @@ class ListingControllerTest {
 
     @Test
     void handlePutRequest_mismatchedDataHolderIds_throwUnauthorized() throws Exception {
-        validListingData.setId("invalidId");
+        validListingData.setLeaser("invalidId");
         String jsonBody = new ObjectMapper().writeValueAsString(validListingData);
 
-        ResultActions response = mvc.perform(put("/api/v1/{id}", validListingId)
+        ResultActions response = mvc.perform(put("/api/v1/{id}", validLeaserId)
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
@@ -164,9 +167,9 @@ class ListingControllerTest {
     void handlePutRequest_validListingData_successMsg() throws Exception {
         String jsonBody = new ObjectMapper().writeValueAsString(validListingData);
 
-        doReturn(Optional.of(validListingData)).when(repository).findById(validListingId);
+        doReturn(Optional.of(validListingData)).when(repository).findById(validLeaserId);
 
-        ResultActions response = mvc.perform(put("/api/v1/{id}", validListingId)
+        ResultActions response = mvc.perform(put("/api/v1/{id}", validLeaserId)
                 .content(jsonBody).contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
@@ -194,10 +197,10 @@ class ListingControllerTest {
     }
 
     @Test
-    void handleDeleteRequest_validListingId_successMsg() throws Exception {
-        doReturn(Optional.of(validListingData)).when(repository).findById(validListingId);
+    void handleDeleteRequest_validLeaserId_successMsg() throws Exception {
+        doReturn(Optional.of(validListingData)).when(repository).findById(validLeaserId);
 
-        ResultActions response = mvc.perform(delete("/api/v1/{id}", validListingId)
+        ResultActions response = mvc.perform(delete("/api/v1/{id}", validLeaserId)
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
 
         String responseJson = response.andReturn().getResponse().getContentAsString();

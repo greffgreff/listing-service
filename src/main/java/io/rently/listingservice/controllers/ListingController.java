@@ -32,7 +32,7 @@ public class ListingController {
     public ResponseContent handlePostRequest(@RequestHeader("Authorization") String header, @RequestBody Listing listing) {
         verifyOwnership(header, listing.getLeaser());
         service.addListing(listing);
-        return new ResponseContent.Builder().setMessage("Successfully added listing to database.").build();
+        return new ResponseContent.Builder(HttpStatus.CREATED).setMessage("Successfully added listing to database.").build();
     }
 
     @DeleteMapping("/{id}")
@@ -49,10 +49,11 @@ public class ListingController {
         return new ResponseContent.Builder().setMessage("Successfully updated listing from database.").build();
     }
 
-    protected void verifyOwnership(String bearer, String userId) {
+    protected void verifyOwnership(String bearer, String listingId) {
         String token = bearer.split(" ")[1];
         String id = jwt.getClaims(token).getSubject();
-        if (!Objects.equals(id, userId)) {
+        Broadcaster.debug(id);
+        if (!Objects.equals(id, listingId)) {
             throw Errors.UNAUTHORIZED_REQUEST;
         }
     }
