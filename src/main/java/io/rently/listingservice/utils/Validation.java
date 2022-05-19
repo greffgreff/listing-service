@@ -1,20 +1,15 @@
 package io.rently.listingservice.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 public class Validation {
-    public static boolean canParseToReg(String value, String regexPattern) {
-        return Pattern.compile(regexPattern)
-                .matcher(value)
-                .matches();
-    }
+
+    private Validation() { }
 
     public static boolean canParseToTs(String value) {
         try {
-            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(1333125342 * 1000L));
+            new Date(Long.parseLong(value));
             return true;
         }
         catch (Exception ignore) {
