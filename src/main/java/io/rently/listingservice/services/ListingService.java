@@ -10,7 +10,6 @@ import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -51,7 +50,7 @@ public class ListingService {
         repository.save(listing);
     }
 
-    public void putById(String id, Listing listing) {
+    public void updateListing(String id, Listing listing) {
         Broadcaster.info("Updating listing from database: " + id);
         validateData(listing);
         tryFindById(id);
@@ -65,7 +64,7 @@ public class ListingService {
         repository.save(listing);
     }
 
-    public void deleteById(String id) {
+    public void deleteListing(String id) {
         Broadcaster.info("Removing listing from database: " + id);
         Listing listing = tryFindById(id);
         imagesService.deleteImage(id);

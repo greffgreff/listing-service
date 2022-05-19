@@ -38,14 +38,14 @@ public class ListingController {
     @DeleteMapping("/{id}")
     public ResponseContent handleDeleteRequest(@RequestHeader("Authorization") String header, @PathVariable String id) {
         verifyOwnership(header, id);
-        service.deleteById(id);
+        service.deleteListing(id);
         return new ResponseContent.Builder().setMessage("Successfully removed listing from database.").build();
     }
 
     @PutMapping("/{id}")
     public ResponseContent handlePutRequest(@RequestHeader("Authorization") String header, @PathVariable String id, @RequestBody Listing listing) {
         verifyOwnership(header, listing.getLeaser());
-        service.putById(id, listing);
+        service.updateListing(id, listing);
         return new ResponseContent.Builder().setMessage("Successfully updated listing from database.").build();
     }
 

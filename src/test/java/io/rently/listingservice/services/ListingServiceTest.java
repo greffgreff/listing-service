@@ -97,7 +97,7 @@ class ListingServiceTest {
 
         when(repository.findById(invalidDataHolderId)).thenReturn(Optional.ofNullable(null));
 
-        assertThrows(Errors.LISTING_NOT_FOUND.getClass(), () -> service.putById(invalidDataHolderId, listing));
+        assertThrows(Errors.LISTING_NOT_FOUND.getClass(), () -> service.updateListing(invalidDataHolderId, listing));
     }
 
     @Test
@@ -107,7 +107,7 @@ class ListingServiceTest {
 
         when(repository.findById(validId)).thenReturn(Optional.of(validListingData));
 
-        assertDoesNotThrow(() -> service.putById(validListingData.getId(), validListingData));
+        assertDoesNotThrow(() -> service.updateListing(validListingData.getId(), validListingData));
     }
 
     @Test
@@ -116,7 +116,7 @@ class ListingServiceTest {
 
         when(repository.findById(invalidDataHolderId)).thenReturn(Optional.ofNullable(null));
 
-        assertThrows(Errors.LISTING_NOT_FOUND.getClass(), () -> service.deleteById(invalidDataHolderId));
+        assertThrows(Errors.LISTING_NOT_FOUND.getClass(), () -> service.deleteListing(invalidDataHolderId));
     }
 
     @Test
@@ -126,6 +126,6 @@ class ListingServiceTest {
 
         when(repository.findById(validId)).thenReturn(Optional.of(validListingData));
 
-        assertDoesNotThrow(() -> service.deleteById(validId));
+        assertDoesNotThrow(() -> service.deleteListing(validId));
     }
 }
