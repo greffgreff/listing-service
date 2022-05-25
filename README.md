@@ -1,10 +1,19 @@
-[banner missing]
+<p>
+  <img src="https://github.com/rently-io/listing-service/actions/workflows/ci.yml/badge.svg" />
+  <img src="https://github.com/rently-io/listing-service/actions/workflows/cd.yml/badge.svg" />
+</p>
 
-# Listing Service V1.0
+# Listing Service
 
-This Spring Boot project is one among other RESTful APIs used in the larger Rently.io project whose frontend can be found [here](https://github.com/greffgreff/rently). More specifically, this endpoint is intended to serve requests regarding adverts that users create on the Rently.io website (in theory) and fecthing specific listings. Fetching lisitngs in bulk is perfomed using this [search service](). Listings are stored insinde a MongoDB database. Possible requests include `GET`, `POST`, `PUT`, `DELETE`. Upon certain requests, both data valiation and ownership verification is performed using JWTs.
 
-## [C2 model show here]
+This Spring Boot project is one among other RESTful APIs used in the larger Rently project whose frontend can be found [here](https://github.com/greffgreff/rently). 
+
+More specifically, this endpoint is intended to serve requests regarding adverts that users create on the Rently.io website (in theory) and fecthing specific listings. Fetching lisitngs in bulk is perfomed using this [search service](). 
+
+Listings are stored on a MongoDB database. Possible requests include `GET`, `POST`, `PUT`, `DELETE`. Upon certain requests, both data valiation and ownership verification is performed using JWTs.
+
+### C2 model
+![C2 model](https://i.imgur.com/CqQbDQA.png)
 
 ## Objects
 
@@ -135,7 +144,6 @@ A [listing](#listing-object) object.
 |   `401`    | _"Request is either no longer valid or has been tampered with"_                                                       | Request bearer has either expired or the subject and the data holder do not match |
 |   `406`    | _"A non-optional field has missing value. Value of field '`field`' was expected but got null"_                        | Non-optional field was missing                                                    |
 |   `406`    | _"Validation failure occurred. Value of field '`field`' could not be recognized as type "`type`" (value: '`value`')"_ | Non-optional field was of the wrong type                                          |
-| `406` | *"No content found in request body"* | No data was sent through the request's body in json format | 
 
 <br />
 
@@ -171,7 +179,6 @@ A [listing](#listing-object) object.
 |   `406`    | _"A non-optional field has missing value. Value of field '`field`' was expected but got null"_                        | Non-optional field was missing                                                    |
 |   `406`    | _"Validation failure occurred. Value of field '`field`' could not be recognized as type "`type`" (value: '`value`')"_ | Non-optional field was of the wrong type                                          |
 |   `401`    | _"Request is either no longer valid or has been tampered with"_                                                       | Request bearer has either expired or the subject and the data holder do not match |
-| `406` | *"No content found in request body"* | No data was sent through the request's body in json format | 
 
 <br />
 
