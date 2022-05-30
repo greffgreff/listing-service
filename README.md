@@ -15,7 +15,7 @@ After each subsequent additions and changes to the codebase of the service, test
 Listings are stored on a MongoDB database. Possible requests include `GET`, `POST`, `PUT`, `DELETE`. Upon certain requests, both data valiation and ownership verification is performed using JWTs.
 
 ### C2 model
-![C2 model](https://i.imgur.com/CqQbDQA.png)
+![C2 model](https://i.imgur.com/KEhA9Dx.jpg)
 
 ## Objects
 
