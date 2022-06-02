@@ -1,11 +1,8 @@
 package io.rently.listingservice.utils;
 
 import io.jsonwebtoken.*;
-import io.jsonwebtoken.impl.crypto.DefaultJwtSignatureValidator;
 import io.rently.listingservice.exceptions.Errors;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;

@@ -1,6 +1,5 @@
 package io.rently.listingservice.middlewares;
 
-import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Jwt;
 import org.springframework.http.HttpStatus;
@@ -10,7 +9,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;

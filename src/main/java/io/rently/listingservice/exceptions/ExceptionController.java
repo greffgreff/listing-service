@@ -1,8 +1,8 @@
 package io.rently.listingservice.exceptions;
 
 import com.bugsnag.Bugsnag;
-import io.rently.listingservice.dtos.ResponseContent;
 import io.rently.listingservice.components.MailerService;
+import io.rently.listingservice.dtos.ResponseContent;
 import io.rently.listingservice.utils.Broadcaster;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
