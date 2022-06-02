@@ -1,4 +1,4 @@
-package io.rently.listingservice.errors;
+package io.rently.listingservice.exceptions;
 
 import com.bugsnag.Bugsnag;
 import io.rently.listingservice.components.MailerService;
