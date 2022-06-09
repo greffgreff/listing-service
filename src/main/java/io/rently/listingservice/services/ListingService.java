@@ -117,8 +117,6 @@ public class ListingService {
             throw new Errors.HttpFieldMissing("address.country");
         } else if (listing.getAddress().getCity() == null) {
             throw new Errors.HttpFieldMissing("address.city");
-        } else if (listing.getAddress().getZip() == null) {
-            throw new Errors.HttpFieldMissing("address.zip");
         }
     }
 }
