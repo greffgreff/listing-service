@@ -3,9 +3,9 @@ package io.rently.listingservice.services;
 import io.rently.listingservice.components.ImagesService;
 import io.rently.listingservice.components.MailerService;
 import io.rently.listingservice.components.UserService;
+import io.rently.listingservice.dtos.Listing;
 import io.rently.listingservice.exceptions.Errors;
 import io.rently.listingservice.interfaces.ListingsRepository;
-import io.rently.listingservice.dtos.Listing;
 import io.rently.listingservice.utils.Broadcaster;
 import io.rently.listingservice.utils.Validation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,8 +117,6 @@ public class ListingService {
             throw new Errors.HttpFieldMissing("address.country");
         } else if (listing.getAddress().getCity() == null) {
             throw new Errors.HttpFieldMissing("address.city");
-        } else if (listing.getAddress().getZip() == null) {
-            throw new Errors.HttpFieldMissing("address.zip");
         }
     }
 }

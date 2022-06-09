@@ -11,7 +11,7 @@ public class ListingControllerTestConfigs {
 
     @Bean
     @Primary
-    public ListingsRepository userRepository() {
+    public ListingsRepository listingsRepository() {
         return Mockito.mock(ListingsRepository.class);
     }
 }
