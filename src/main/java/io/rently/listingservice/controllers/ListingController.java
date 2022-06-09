@@ -21,6 +21,7 @@ public class ListingController {
     @Autowired
     private Jwt jwt;
 
+    @Deprecated
     @GetMapping("/{id}")
     public ResponseContent handleGetRequest(@PathVariable String id) {
         Listing listing = service.getListingById(id);
