@@ -25,7 +25,7 @@ public class MailerService {
         this.restTemplate = restTemplate;
     }
 
-    public void dispatchNewListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public synchronized void dispatchNewListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending new listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "NEW_LISTING");
@@ -44,7 +44,7 @@ public class MailerService {
         }
     }
 
-    public void dispatchUpdatedListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
+    public synchronized void dispatchUpdatedListingNotification(String recipientEmail, String listingTitle, String listingLink, String listingDescription, String listingImage) {
         Broadcaster.info("Sending updated listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "UPDATED_LISTING");
@@ -63,7 +63,7 @@ public class MailerService {
         }
     }
 
-    public void dispatchDeletedListingNotification(String recipientEmail, String listingTitle, String listingDescription) {
+    public synchronized void dispatchDeletedListingNotification(String recipientEmail, String listingTitle, String listingDescription) {
         Broadcaster.info("Sending deleted listing email to " + recipientEmail);
         Map<String, String> data = new HashMap<>();
         data.put("type", "LISTING_DELETION");
@@ -80,7 +80,7 @@ public class MailerService {
         }
     }
 
-    public void dispatchErrorReportToDevs(Exception exception) {
+    public synchronized void dispatchErrorReportToDevs(Exception exception) {
         Broadcaster.info("Dispatching error report...");
         Map<String, Object> report = new HashMap<>();
         report.put("type", "DEV_ERROR");
