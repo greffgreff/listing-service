@@ -170,20 +170,6 @@ class ListingControllerTest {
     }
 
     @Test
-    void handleDeleteRequest_mismatchedDataHolderIds_throwUnauthorized() throws Exception {
-        ResultActions response = mvc.perform(delete("/api/v1/{id}", "invalidId")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token));
-
-        String responseJson = response.andReturn().getResponse().getContentAsString();
-        response.andExpect(MockMvcResultMatchers.status().isUnauthorized());
-        response.andExpect(MockMvcResultMatchers.jsonPath("$.status").isNotEmpty());
-        assert responseJson.contains(String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-        response.andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").isNotEmpty());
-        response.andExpect(MockMvcResultMatchers.jsonPath("$.message").isNotEmpty());
-        response.andExpect(MockMvcResultMatchers.jsonPath("$.content").doesNotExist());
-    }
-
-    @Test
     void handleDeleteRequest_validLeaserId_successMsg() throws Exception {
         doReturn(Optional.of(validListingData)).when(repository).findById(validLeaserId);
 
