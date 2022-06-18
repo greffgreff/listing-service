@@ -5,14 +5,18 @@
 
 # Listing Service
 
-
 This Spring Boot project is one among other RESTful APIs used in the larger Rently project. More specifically, this endpoint is intended to serve requests regarding adverts that users create on the Rently.io website (in theory) and fecthing specific listings. Fetching listings in bulk is perfomed using this [search service](https://github.com/rently-io/search-service). 
+
+Listings are stored on a MongoDB database. Possible requests include `GET`, `POST`, `PUT`, `DELETE`. Upon certain requests, both data valiation and ownership verification is performed using JWTs.
 
 After each subsequent additions and changes to the codebase of the service, tests are ran and, if passed, the service is automatically deployed on to a Heroku instance [here](https://listing-service-rently.herokuapp.com/) and dockerized [here](https://hub.docker.com/repository/docker/dockeroo80/rently-listing-service).
 
 > ⚠️ Please note that the service is currently deployed on a free Heroku instance and needs a few seconds to warm up on first request!
 
-Listings are stored on a MongoDB database. Possible requests include `GET`, `POST`, `PUT`, `DELETE`. Upon certain requests, both data valiation and ownership verification is performed using JWTs.
+Please use the following command to run the docker image:
+```bash
+docker run -p 8081:8081 -e CREDENTIALS=bb63b9ccbf9ab6:GhcjiQrwHJ6tGjXz dockeroo80/rently-listing-service
+```
 
 ### C2 model
 ![C2 model](https://i.imgur.com/34Nvkd4.jpg)
